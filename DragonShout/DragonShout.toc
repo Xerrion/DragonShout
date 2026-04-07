@@ -1,0 +1,42 @@
+## Interface: 120001
+## Interface-BCC: 20505
+## Interface-Mists: 50503
+## Title: Dragon Shout
+## Notes: A highly customizable combat announcer for interrupts, CC, and dispels
+## Author: Xerrion
+## Version: @project-version@
+## SavedVariables: DragonShoutDB
+## X-License: MIT
+## IconTexture: Interface\AddOns\DragonShout\DragonShout_Icon
+
+# Libraries
+Libs\embeds.xml
+
+# Locales
+Locales\enUS.lua
+Locales\deDE.lua
+Locales\esES.lua
+Locales\esMX.lua
+Locales\frFR.lua
+Locales\itIT.lua
+Locales\koKR.lua
+Locales\ptBR.lua
+Locales\ruRU.lua
+Locales\zhCN.lua
+Locales\zhTW.lua
+
+# Core
+Core\Init.lua
+Core\Config.lua
+Core\Lifecycle.lua
+Core\ConfigWindow.lua
+Core\Announcer.lua
+Core\SlashCommands.lua
+Core\MinimapIcon.lua
+
+# Listeners
+Listeners\CombatLogListener.lua
+Listeners\InterruptListener.lua
+Listeners\CCListener.lua
+Listeners\DispelListener.lua
+Listeners\AuraListener.lua

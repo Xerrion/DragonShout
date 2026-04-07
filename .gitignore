@@ -1,0 +1,8 @@
+.env
+.release/
+nul
+Libs/*
+!Libs/Ace3
+!Libs/LibDataBroker-1.1
+!Libs/LibDBIcon-1.0
+!Libs/embeds.xml

@@ -1,0 +1,182 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# DragonShout - Lua / WoW addon specific overrides.
+# Generic settings inherited from org-level .coderabbit.yaml
+
+language: en-US
+inheritance: true
+
+tone_instructions: >-
+  Review WoW addon Lua code. Focus on nil safety, global leaks,
+  event hygiene, and taint risks. Skip style - luacheck handles it.
+
+reviews:
+  profile: chill
+  high_level_summary: true
+  poem: false
+  sequence_diagrams: false
+  related_issues: false
+  related_prs: false
+  suggested_labels: true
+  auto_apply_labels: true
+  suggested_reviewers: false
+
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    ignore_title_keywords:
+      - WIP
+      - DO NOT MERGE
+    drafts: false
+
+  labeling_instructions:
+    - label: core
+      instructions: >-
+        Apply when the PR changes files under DragonShout/Core/ -
+        addon lifecycle, config, slash commands, minimap icon, announcer.
+    - label: listeners
+      instructions: >-
+        Apply when the PR changes files under DragonShout/Listeners/ -
+        CLEU dispatcher, interrupt, CC, dispel, and aura handlers.
+    - label: options
+      instructions: >-
+        Apply when the PR changes files under DragonShout_Options/ -
+        config UI widgets, tabs, and layout.
+    - label: ci
+      instructions: >-
+        Apply when the PR changes files under .github/ -
+        workflows, issue templates, or PR templates.
+    - label: localization
+      instructions: >-
+        Apply when the PR changes files under DragonShout/Locales/ -
+        translation tables for any language.
+
+  path_filters:
+    - "!**/Libs/**"
+    - "!**/node_modules/**"
+    - "!**/*.snap"
+
+  path_instructions:
+    - path: "DragonShout/Core/**/*.lua"
+      instructions: >-
+        Core addon layer - lifecycle, AceDB config, slash commands, minimap icon,
+        announcer engine. Review for correct AceAddon/AceEvent/AceTimer patterns,
+        proper event cleanup on OnDisable, and SavedVariables schema correctness.
+        All files use `local ADDON_NAME, ns = ...` shared namespace.
+    - path: "DragonShout/Listeners/**/*.lua"
+      instructions: >-
+        Event listener layer - COMBAT_LOG_EVENT_UNFILTERED dispatch, interrupt,
+        CC, dispel, and aura handlers. Key concerns: always use
+        CombatLogGetCurrentEventInfo() (never read event args directly),
+        proper RegisterEvent/UnregisterEvent pairing, nil-check ns.playerGUID
+        before comparing source/dest GUIDs, throttle checks to avoid spam,
+        and correct CLEU sub-event field indexing. SPELL_AURA_REFRESH does NOT
+        have an amount field at idx 16. Do not flag WOW_PROJECT_ID version
+        guards as dead code.
+    - path: "DragonShout_Options/**/*.lua"
+      instructions: >-
+        Config UI - DragonWidgets-based option tabs. Review for correct widget
+        lifecycle, proper config key paths matching db.profile schema in
+        Core/Config.lua, and callback wiring. Uses CreateFrame-based widgets,
+        not AceGUI.
+    - path: "DragonShout/Locales/**/*.lua"
+      instructions: >-
+        Localization tables using AceLocale. Only flag missing keys
+        compared to enUS.lua or incorrect format string placeholders
+        (%s, %d, etc). Do not flag translation quality or grammar.
+    - path: ".github/workflows/**/*.yml"
+      instructions: >-
+        CI workflows. Check for correct event triggers (pull_request_target
+        for lint, workflow_dispatch for packager), proper secret references,
+        and action version pinning. BigWigsMods packager workflow has
+        specific requirements - do not flag its patterns.
+    - path: "**/*.md"
+      instructions: >-
+        Documentation. Only flag broken links or factual errors.
+        Do not suggest rewording or restructuring prose.
+    - path: ".luacheckrc"
+      instructions: >-
+        Luacheck configuration. Review for correct globals declarations
+        and rule settings. Do not suggest adding rules for style preferences
+        already handled by project conventions.
+
+  finishing_touches:
+    docstrings:
+      enabled: false
+    unit_tests:
+      enabled: false
+    simplify:
+      enabled: false
+
+  pre_merge_checks:
+    title:
+      mode: warning
+      requirements: >-
+        PR title must use Conventional Commit format: type(scope): description.
+        Valid types: feat, fix, refactor, docs, chore, ci, test, style, perf.
+
+  tools:
+    # -- Keep universal tools --
+    github-checks:
+      enabled: true
+    gitleaks:
+      enabled: true
+    trufflehog:
+      enabled: true
+    actionlint:
+      enabled: true
+    shellcheck:
+      enabled: true
+    markdownlint:
+      enabled: true
+    yamllint:
+      enabled: true
+    languagetool:
+      enabled: false
+
+    # -- Disable: not a JS/TS/Python/Rust project --
+    biome:
+      enabled: false
+    eslint:
+      enabled: false
+    ruff:
+      enabled: false
+    flake8:
+      enabled: false
+    clippy:
+      enabled: false
+    hadolint:
+      enabled: false
+    swiftlint:
+      enabled: false
+    phpstan:
+      enabled: false
+    phpmd:
+      enabled: false
+    phpcs:
+      enabled: false
+    golangci-lint:
+      enabled: false
+    checkov:
+      enabled: false
+    tflint:
+      enabled: false
+    detekt:
+      enabled: false
+    fortitudeLint:
+      enabled: false
+    rubocop:
+      enabled: false
+    buf:
+      enabled: false
+    regal:
+      enabled: false
+    pmd:
+      enabled: false
+    clang:
+      enabled: false
+    cppcheck:
+      enabled: false
+    semgrep:
+      enabled: false
+    circleci:
+      enabled: false

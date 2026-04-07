@@ -1,0 +1,6 @@
+[tools]
+lua = "5.1"
+
+[tasks.lint]
+run = "luacheck ."
+description = "Run luacheck linter"

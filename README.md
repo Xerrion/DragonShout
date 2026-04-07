@@ -1,0 +1,38 @@
+# DragonShout
+
+A highly customizable combat announcer addon for World of Warcraft. DragonShout sends chat messages when you interrupt, get CC'd, apply CC to enemies, or dispel.
+
+## Features
+
+- **Interrupt announcements** - Notify your group when you interrupt a cast
+- **CC on you** - Announce when you are crowd controlled (silence, polymorph, stun, disorient, fear, root) with per-type toggles
+- **CC applied** - Announce when you CC an enemy
+- **Dispel announcements** - Notify when you dispel a debuff or buff
+- **Custom spells** - Add any spell ID with a custom template and channel
+- **Per-category channels** - Send each category to AUTO, PARTY, RAID, SAY, or YELL
+- **Customizable templates** - Use {spell}, {target}, {source}, {extraSpell} tokens
+- **Throttle control** - Prevent spam with configurable cooldown per spell
+- **Profile support** - Save different configurations per character via AceDB profiles
+- **DragonWidgets options UI** - Full config panel matching the Dragon addon family
+
+## Supported Versions
+
+- Retail (The War Within / Midnight)
+- MoP Classic
+- TBC Anniversary
+
+## Installation
+
+Install via CurseForge, Wago, or manually place the `DragonShout` and `DragonShout_Options` folders into your `Interface/AddOns/` directory.
+
+## Slash Commands
+
+- `/ds` or `/dragonshout` - Show help
+- `/ds toggle` - Toggle addon on/off
+- `/ds config` - Open settings panel
+- `/ds status` - Show current settings
+- `/ds help` - Show help
+
+## License
+
+MIT

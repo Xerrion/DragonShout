@@ -1,0 +1,38 @@
+## Interface: 120001
+## Interface-BCC: 20505
+## Interface-Mists: 50503
+## Title: DragonShout Options
+## Notes: Configuration panel for DragonShout
+## Author: Xerrion
+## Version: @project-version@
+## Dependencies: DragonShout
+## LoadOnDemand: 1
+
+## DragonWidgets embedded library
+Libs\DragonWidgets\DragonWidgets\DragonWidgets.lua
+Libs\DragonWidgets\DragonWidgets\LayoutConstants.lua
+Libs\DragonWidgets\DragonWidgets\Widgets\WidgetConstants.lua
+Libs\DragonWidgets\DragonWidgets\Widgets\Panel.lua
+Libs\DragonWidgets\DragonWidgets\Widgets\ScrollFrame.lua
+Libs\DragonWidgets\DragonWidgets\Widgets\TabGroup.lua
+Libs\DragonWidgets\DragonWidgets\Widgets\Header.lua
+Libs\DragonWidgets\DragonWidgets\Widgets\Description.lua
+Libs\DragonWidgets\DragonWidgets\Widgets\Section.lua
+Libs\DragonWidgets\DragonWidgets\Widgets\Toggle.lua
+Libs\DragonWidgets\DragonWidgets\Widgets\Slider.lua
+Libs\DragonWidgets\DragonWidgets\Widgets\Dropdown.lua
+Libs\DragonWidgets\DragonWidgets\Widgets\ColorPicker.lua
+Libs\DragonWidgets\DragonWidgets\Widgets\TextInput.lua
+Libs\DragonWidgets\DragonWidgets\Widgets\Button.lua
+Libs\DragonWidgets\DragonWidgets\Widgets\ItemSlot.lua
+Libs\DragonWidgets\DragonWidgets\Widgets\ItemList.lua
+
+Core.lua
+
+Tabs\GeneralTab.lua
+Tabs\InterruptsTab.lua
+Tabs\CCOnYouTab.lua
+Tabs\CCAppliedTab.lua
+Tabs\DispelsTab.lua
+Tabs\CustomSpellsTab.lua
+Tabs\ProfilesTab.lua
