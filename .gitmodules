@@ -1,12 +1,16 @@
 [submodule "DragonShout/Libs/Ace3"]
 	path = DragonShout/Libs/Ace3
 	url = https://github.com/WoWUIDev/Ace3.git
+	ignore = dirty
 [submodule "DragonShout/Libs/LibDataBroker-1.1"]
 	path = DragonShout/Libs/LibDataBroker-1.1
 	url = https://github.com/tekkub/libdatabroker-1-1.git
+	ignore = dirty
 [submodule "DragonShout/Libs/LibDBIcon-1.0"]
 	path = DragonShout/Libs/LibDBIcon-1.0
 	url = https://github.com/kaldown/LibDBIcon-1.0.git
+	ignore = dirty
 [submodule "DragonShout_Options/Libs/DragonWidgets"]
 	path = DragonShout_Options/Libs/DragonWidgets
 	url = https://github.com/Xerrion/DragonWidgets
+	ignore = dirty
