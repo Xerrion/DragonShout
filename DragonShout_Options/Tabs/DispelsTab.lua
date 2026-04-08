@@ -36,37 +36,37 @@ local function CreateContent(parent)
     local db = dsns.Addon.db
     local yOffset = LC.PADDING_TOP
 
-    local header = W.CreateHeader(parent, L["Dispels"])
-    LC.AnchorWidget(header, parent, yOffset)
-    yOffset = yOffset - header:GetHeight() - LC.SPACING_AFTER_HEADER
+    local section = W.CreateSection(parent, L["Dispels"])
+    local content = section.content
+    local innerY = -LC.SECTION_PADDING_TOP
 
-    local enableToggle = W.CreateToggle(parent, {
+    local enableToggle = W.CreateToggle(content, {
         label = L["Dispels"],
         tooltip = L["Enable dispel announcements"],
         get = function() return db.profile.dispels.enabled end,
         set = function(value) db.profile.dispels.enabled = value end,
     })
-    LC.AnchorWidget(enableToggle, parent, yOffset)
-    yOffset = yOffset - enableToggle:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    innerY = LC.AnchorWidget(enableToggle, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
-    local channelDropdown = W.CreateDropdown(parent, {
+    local channelDropdown = W.CreateDropdown(content, {
         label = L["Channel"],
         tooltip = L["Chat channel to send announcements to"],
         values = ns.CHANNEL_VALUES,
         get = function() return db.profile.dispels.channel end,
         set = function(value) db.profile.dispels.channel = value end,
     })
-    LC.AnchorWidget(channelDropdown, parent, yOffset)
-    yOffset = yOffset - channelDropdown:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    innerY = LC.AnchorWidget(channelDropdown, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
-    local templateInput = W.CreateTextInput(parent, {
+    local templateInput = W.CreateTextInput(content, {
         label = L["Template"],
         tooltip = L["Announcement template. Tokens: {spell}, {target}, {extraSpell}"],
         get = function() return db.profile.dispels.template end,
         set = function(value) db.profile.dispels.template = value end,
     })
-    LC.AnchorWidget(templateInput, parent, yOffset)
-    yOffset = yOffset - templateInput:GetHeight()
+    innerY = LC.AnchorWidget(templateInput, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
+
+    section:SetContentHeight(math_abs(innerY) + LC.SECTION_PADDING_BOTTOM)
+    yOffset = LC.AnchorSection(section, parent, yOffset) - LC.SPACING_BETWEEN_SECTIONS
 
     parent:SetHeight(math_abs(yOffset) + LC.PADDING_BOTTOM)
 end

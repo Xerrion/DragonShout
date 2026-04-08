@@ -12,6 +12,7 @@ local ADDON_NAME, ns = ...
 -------------------------------------------------------------------------------
 
 local pairs = pairs
+local ipairs = ipairs
 local table_sort = table.sort
 local math_abs = math.abs
 local StaticPopup_Show = StaticPopup_Show
@@ -105,16 +106,15 @@ local function CreateCurrentProfileSection(parent, yOffset, refreshAll)
     local db = dsns.Addon.db
     local newProfileName = ""
 
-    local header = W.CreateHeader(parent, L["Current Profile"])
-    LC.AnchorWidget(header, parent, yOffset)
-    yOffset = yOffset - header:GetHeight() - LC.SPACING_AFTER_HEADER
+    local section = W.CreateSection(parent, L["Current Profile"])
+    local content = section.content
+    local innerY = -LC.SECTION_PADDING_TOP
 
-    local desc = W.CreateDescription(parent,
+    local desc = W.CreateDescription(content,
         L["Profiles allow you to save different configurations for different characters."])
-    LC.AnchorWidget(desc, parent, yOffset)
-    yOffset = yOffset - desc:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    innerY = LC.AnchorWidget(desc, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
-    local activeDropdown = W.CreateDropdown(parent, {
+    local activeDropdown = W.CreateDropdown(content, {
         label = L["Active Profile"],
         tooltip = L["Select the active profile"],
         values = GetProfileValues,
@@ -124,19 +124,17 @@ local function CreateCurrentProfileSection(parent, yOffset, refreshAll)
             refreshAll()
         end,
     })
-    LC.AnchorWidget(activeDropdown, parent, yOffset)
-    yOffset = yOffset - activeDropdown:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    innerY = LC.AnchorWidget(activeDropdown, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
-    local newProfileInput = W.CreateTextInput(parent, {
+    local newProfileInput = W.CreateTextInput(content, {
         label = L["New Profile Name"],
         tooltip = L["Enter a name for a new profile"],
         get = function() return "" end,
         set = function(value) newProfileName = value end,
     })
-    LC.AnchorWidget(newProfileInput, parent, yOffset)
-    yOffset = yOffset - newProfileInput:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    innerY = LC.AnchorWidget(newProfileInput, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
-    local createButton = W.CreateButton(parent, {
+    local createButton = W.CreateButton(content, {
         text = L["Create Profile"],
         tooltip = L["Create a new profile with the entered name"],
         onClick = function()
@@ -150,8 +148,10 @@ local function CreateCurrentProfileSection(parent, yOffset, refreshAll)
             end
         end,
     })
-    LC.AnchorWidget(createButton, parent, yOffset)
-    yOffset = yOffset - createButton:GetHeight()
+    innerY = LC.AnchorWidget(createButton, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
+
+    section:SetContentHeight(math_abs(innerY) + LC.SECTION_PADDING_BOTTOM)
+    yOffset = LC.AnchorSection(section, parent, yOffset) - LC.SPACING_BETWEEN_SECTIONS
 
     return yOffset, activeDropdown
 end
@@ -159,13 +159,11 @@ end
 local function CreateActionsSection(parent, yOffset, refreshAll)
     local db = dsns.Addon.db
 
-    yOffset = yOffset - LC.SPACING_BETWEEN_SECTIONS
+    local section = W.CreateSection(parent, L["Profile Actions"])
+    local content = section.content
+    local innerY = -LC.SECTION_PADDING_TOP
 
-    local header = W.CreateHeader(parent, L["Profile Actions"])
-    LC.AnchorWidget(header, parent, yOffset)
-    yOffset = yOffset - header:GetHeight() - LC.SPACING_AFTER_HEADER
-
-    local copyDropdown = W.CreateDropdown(parent, {
+    local copyDropdown = W.CreateDropdown(content, {
         label = L["Copy From"],
         tooltip = L["Copy settings from another profile"],
         values = GetOtherProfileValues,
@@ -175,20 +173,18 @@ local function CreateActionsSection(parent, yOffset, refreshAll)
             refreshAll()
         end,
     })
-    LC.AnchorWidget(copyDropdown, parent, yOffset)
-    yOffset = yOffset - copyDropdown:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    innerY = LC.AnchorWidget(copyDropdown, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
-    local resetButton = W.CreateButton(parent, {
+    local resetButton = W.CreateButton(content, {
         text = L["Reset Profile"],
         tooltip = L["Reset the current profile to default settings"],
         onClick = function()
             StaticPopup_Show("DRAGONSHOUT_OPTIONS_RESET_PROFILE")
         end,
     })
-    LC.AnchorWidget(resetButton, parent, yOffset)
-    yOffset = yOffset - resetButton:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    innerY = LC.AnchorWidget(resetButton, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
-    local deleteDropdown = W.CreateDropdown(parent, {
+    local deleteDropdown = W.CreateDropdown(content, {
         label = L["Delete Profile"],
         tooltip = L["Delete a profile"],
         values = GetOtherProfileValues,
@@ -197,8 +193,10 @@ local function CreateActionsSection(parent, yOffset, refreshAll)
             StaticPopup_Show("DRAGONSHOUT_OPTIONS_DELETE_PROFILE", value)
         end,
     })
-    LC.AnchorWidget(deleteDropdown, parent, yOffset)
-    yOffset = yOffset - deleteDropdown:GetHeight()
+    innerY = LC.AnchorWidget(deleteDropdown, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
+
+    section:SetContentHeight(math_abs(innerY) + LC.SECTION_PADDING_BOTTOM)
+    yOffset = LC.AnchorSection(section, parent, yOffset) - LC.SPACING_BETWEEN_SECTIONS
 
     return yOffset, copyDropdown, deleteDropdown
 end
@@ -216,7 +214,7 @@ local function CreateContent(parent)
 
     local function RefreshProfileWidgets()
         local widgets = { activeDropdown, copyDropdown, deleteDropdown }
-        for _, widget in pairs(widgets) do
+        for _, widget in ipairs(widgets) do
             if widget and widget.Refresh then
                 widget:Refresh()
             end
@@ -231,6 +229,7 @@ local function CreateContent(parent)
 
     parent:SetHeight(math_abs(yOffset) + LC.PADDING_BOTTOM)
 
+    -- Safe: CreateOptionsPanel is call-once guarded in Core.lua; callbacks register exactly once.
     if not isCallbacksRegistered then
         db:RegisterCallback("OnProfileChanged", RefreshProfileWidgets)
         db:RegisterCallback("OnProfileCopied", RefreshProfileWidgets)

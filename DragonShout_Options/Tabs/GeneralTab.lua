@@ -34,11 +34,11 @@ local dsns
 local function CreateCoreSection(parent, yOffset)
     local db = dsns.Addon.db
 
-    local header = W.CreateHeader(parent, L["Core Settings"])
-    LC.AnchorWidget(header, parent, yOffset)
-    yOffset = yOffset - header:GetHeight() - LC.SPACING_AFTER_HEADER
+    local section = W.CreateSection(parent, L["Core Settings"])
+    local content = section.content
+    local innerY = -LC.SECTION_PADDING_TOP
 
-    local enableToggle = W.CreateToggle(parent, {
+    local enableToggle = W.CreateToggle(content, {
         label = L["Enable DragonShout"],
         tooltip = L["Enable or disable the addon"],
         get = function() return db.profile.enabled end,
@@ -51,10 +51,9 @@ local function CreateCoreSection(parent, yOffset)
             end
         end,
     })
-    LC.AnchorWidget(enableToggle, parent, yOffset)
-    yOffset = yOffset - enableToggle:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    innerY = LC.AnchorWidget(enableToggle, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
-    local throttleSlider = W.CreateSlider(parent, {
+    local throttleSlider = W.CreateSlider(content, {
         label = L["Throttle Duration"],
         tooltip = L["Throttle Duration"],
         min = 0.5,
@@ -63,10 +62,9 @@ local function CreateCoreSection(parent, yOffset)
         get = function() return db.profile.throttleDuration end,
         set = function(value) db.profile.throttleDuration = value end,
     })
-    LC.AnchorWidget(throttleSlider, parent, yOffset)
-    yOffset = yOffset - throttleSlider:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    innerY = LC.AnchorWidget(throttleSlider, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
-    local minimapToggle = W.CreateToggle(parent, {
+    local minimapToggle = W.CreateToggle(content, {
         label = L["Show Minimap Icon"],
         tooltip = L["Toggle the minimap button"],
         get = function() return not db.profile.minimap.hide end,
@@ -75,20 +73,20 @@ local function CreateCoreSection(parent, yOffset)
             dsns.MinimapIcon.SetShown(value)
         end,
     })
-    LC.AnchorWidget(minimapToggle, parent, yOffset)
-    yOffset = yOffset - minimapToggle:GetHeight()
+    innerY = LC.AnchorWidget(minimapToggle, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
+
+    section:SetContentHeight(math_abs(innerY) + LC.SECTION_PADDING_BOTTOM)
+    yOffset = LC.AnchorSection(section, parent, yOffset) - LC.SPACING_BETWEEN_SECTIONS
 
     return yOffset
 end
 
 local function CreateTestingSection(parent, yOffset)
-    yOffset = yOffset - LC.SPACING_BETWEEN_SECTIONS
+    local section = W.CreateSection(parent, L["Testing"])
+    local content = section.content
+    local innerY = -LC.SECTION_PADDING_TOP
 
-    local header = W.CreateHeader(parent, L["Testing"])
-    LC.AnchorWidget(header, parent, yOffset)
-    yOffset = yOffset - header:GetHeight() - LC.SPACING_AFTER_HEADER
-
-    local testInterruptButton = W.CreateButton(parent, {
+    local testInterruptButton = W.CreateButton(content, {
         text = L["Test Interrupt"],
         tooltip = L["Simulate an interrupt announcement"],
         onClick = function()
@@ -100,10 +98,9 @@ local function CreateTestingSection(parent, yOffset)
             })
         end,
     })
-    LC.AnchorWidget(testInterruptButton, parent, yOffset)
-    yOffset = yOffset - testInterruptButton:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    innerY = LC.AnchorWidget(testInterruptButton, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
-    local testCCButton = W.CreateButton(parent, {
+    local testCCButton = W.CreateButton(content, {
         text = L["Test CC"],
         tooltip = L["Simulate a CC announcement"],
         onClick = function()
@@ -112,8 +109,10 @@ local function CreateTestingSection(parent, yOffset)
             })
         end,
     })
-    LC.AnchorWidget(testCCButton, parent, yOffset)
-    yOffset = yOffset - testCCButton:GetHeight()
+    innerY = LC.AnchorWidget(testCCButton, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
+
+    section:SetContentHeight(math_abs(innerY) + LC.SECTION_PADDING_BOTTOM)
+    yOffset = LC.AnchorSection(section, parent, yOffset) - LC.SPACING_BETWEEN_SECTIONS
 
     return yOffset
 end

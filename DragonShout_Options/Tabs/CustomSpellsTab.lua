@@ -16,6 +16,7 @@ local tonumber = tonumber
 local tostring = tostring
 local tinsert = table.insert
 local tremove = table.remove
+local ipairs = ipairs
 
 -------------------------------------------------------------------------------
 -- DragonWidgets references
@@ -41,29 +42,26 @@ local function CreateContent(parent)
     local yOffset = LC.PADDING_TOP
     local newSpellId = ""
 
-    local header = W.CreateHeader(parent, L["Custom Spells"])
-    LC.AnchorWidget(header, parent, yOffset)
-    yOffset = yOffset - header:GetHeight() - LC.SPACING_AFTER_HEADER
+    local section = W.CreateSection(parent, L["Custom Spells"])
+    local content = section.content
+    local innerY = -LC.SECTION_PADDING_TOP
 
-    local desc = W.CreateDescription(parent, L["Add spell IDs to announce when applied to or by you."])
-    LC.AnchorWidget(desc, parent, yOffset)
-    yOffset = yOffset - desc:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    local desc = W.CreateDescription(content, L["Add spell IDs to announce when applied to or by you."])
+    innerY = LC.AnchorWidget(desc, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
-    local tokenDesc = W.CreateDescription(parent,
+    local tokenDesc = W.CreateDescription(content,
         L["Template tokens: {spell} (spell name), {target} (target unit), {source} (caster)"])
-    LC.AnchorWidget(tokenDesc, parent, yOffset)
-    yOffset = yOffset - tokenDesc:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    innerY = LC.AnchorWidget(tokenDesc, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
-    local spellIdInput = W.CreateTextInput(parent, {
+    local spellIdInput = W.CreateTextInput(content, {
         label = L["Spell ID"],
         tooltip = L["Spell ID"],
         get = function() return "" end,
         set = function(value) newSpellId = value end,
     })
-    LC.AnchorWidget(spellIdInput, parent, yOffset)
-    yOffset = yOffset - spellIdInput:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    innerY = LC.AnchorWidget(spellIdInput, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
-    local addButton = W.CreateButton(parent, {
+    local addButton = W.CreateButton(content, {
         text = L["Add"],
         tooltip = L["Add"],
         onClick = function()
@@ -81,10 +79,9 @@ local function CreateContent(parent)
             end
         end,
     })
-    LC.AnchorWidget(addButton, parent, yOffset)
-    yOffset = yOffset - addButton:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    innerY = LC.AnchorWidget(addButton, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
-    local removeButton = W.CreateButton(parent, {
+    local removeButton = W.CreateButton(content, {
         text = L["Remove Last"],
         tooltip = L["Remove Last"],
         onClick = function()
@@ -94,16 +91,17 @@ local function CreateContent(parent)
             end
         end,
     })
-    LC.AnchorWidget(removeButton, parent, yOffset)
-    yOffset = yOffset - removeButton:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    innerY = LC.AnchorWidget(removeButton, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
     -- Display existing custom spells
     for i, entry in ipairs(db.profile.customSpells) do
-        local entryDesc = W.CreateDescription(parent,
+        local entryDesc = W.CreateDescription(content,
             tostring(i) .. ". Spell ID: " .. tostring(entry.spellId) .. " | " .. (entry.template or ""))
-        LC.AnchorWidget(entryDesc, parent, yOffset)
-        yOffset = yOffset - entryDesc:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+        innerY = LC.AnchorWidget(entryDesc, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
     end
+
+    section:SetContentHeight(math_abs(innerY) + LC.SECTION_PADDING_BOTTOM)
+    yOffset = LC.AnchorSection(section, parent, yOffset) - LC.SPACING_BETWEEN_SECTIONS
 
     parent:SetHeight(math_abs(yOffset) + LC.PADDING_BOTTOM)
 end
