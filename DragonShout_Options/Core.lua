@@ -19,7 +19,17 @@ local tinsert = table.insert
 
 local DW = DragonWidgetsNS
 if not DW then
-    error("[DragonShout_Options] DragonWidgets is not loaded. Ensure DragonWidgets is installed and enabled.", 2)
+    print("|cffff6600[DragonShout_Options]|r DragonWidgets is required but not found. Options UI will be unavailable.")
+    ns.DW = { Widgets = {}, LayoutConstants = {} }
+    ns.L = LibStub("AceLocale-3.0"):GetLocale("DragonShout")
+    ns.CHANNEL_VALUES = {}
+    ns.Tabs = {}
+    DragonShout_Options = {
+        Open = function() end,
+        Close = function() end,
+        Toggle = function() end,
+    }
+    return
 end
 
 ns.DW = DW

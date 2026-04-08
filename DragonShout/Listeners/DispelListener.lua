@@ -8,22 +8,23 @@
 local ADDON_NAME, ns = ...
 
 -------------------------------------------------------------------------------
+-- Cached WoW API
+-------------------------------------------------------------------------------
+
+local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
+local select = select
+
+-------------------------------------------------------------------------------
 -- Module
 -------------------------------------------------------------------------------
 
 ns.DispelListener = {}
 
-function ns.DispelListener.OnDispel(
-    _timestamp, _subevent, _hideCaster,
-    sourceGUID, sourceName, _sourceFlags, _sourceRaidFlags,
-    _destGUID, destName, _destFlags, _destRaidFlags,
-    spellId, spellName, _spellSchool,
-    _extraSpellId, extraSpellName, _extraSchool,
-    _auraType
-)
-    -- Guard: only announce dispels performed by the player
+function ns.DispelListener.OnDispel(sourceGUID, sourceName, _, _, _, destName, _, _)
     if not ns.playerGUID then return end
     if sourceGUID ~= ns.playerGUID then return end
+
+    local spellId, spellName, _, _, extraSpellName = select(12, CombatLogGetCurrentEventInfo())
 
     ns.Announcer.Announce("dispels", spellId, {
         spell = spellName,

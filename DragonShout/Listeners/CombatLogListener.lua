@@ -36,24 +36,15 @@ local DISPATCH = {
 ns.CombatLogListener = {}
 
 local function OnCombatLogEvent()
-    local timestamp, subevent, hideCaster,
+    local _, subevent, _,
         sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
-        destGUID, destName, destFlags, destRaidFlags,
-        spellId, spellName, spellSchool,
-        extraSpellId, extraSpellName, extraSchool,
-        auraType = CombatLogGetCurrentEventInfo()
+        destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
 
     local handler = DISPATCH[subevent]
     if not handler then return end
 
-    handler(
-        timestamp, subevent, hideCaster,
-        sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
-        destGUID, destName, destFlags, destRaidFlags,
-        spellId, spellName, spellSchool,
-        extraSpellId, extraSpellName, extraSchool,
-        auraType
-    )
+    handler(sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
+            destGUID, destName, destFlags, destRaidFlags)
 end
 
 function ns.CombatLogListener.Initialize(addon)

@@ -28,13 +28,9 @@ ns.IS_RETAIL = (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE)
 
 ns.Lifecycle = {}
 
-function ns.Lifecycle.Initialize(addon)
+function ns.Lifecycle.Initialize(_addon)
     ns.playerGUID = UnitGUID("player")
-
-    addon:RegisterEvent("PLAYER_LOGIN", function()
-        ns.playerGUID = UnitGUID("player")
-        ns.DebugPrint("Player GUID cached: " .. tostring(ns.playerGUID))
-    end)
+    ns.DebugPrint("Player GUID cached: " .. tostring(ns.playerGUID))
 end
 
 function ns.Lifecycle.Shutdown()

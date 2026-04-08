@@ -13,6 +13,7 @@ local ADDON_NAME, ns = ...
 
 local GetTime = GetTime
 local UnitDebuff = UnitDebuff
+local C_UnitAuras = C_UnitAuras  -- nil on Classic, guarded below
 
 -------------------------------------------------------------------------------
 -- Constants
@@ -70,6 +71,18 @@ local function HandleRetailAura(_event, unitTarget, updateInfo)
     if unitTarget ~= "player" then return end
     if not updateInfo then return end
 
+    if updateInfo.isFullUpdate then
+        if not C_UnitAuras then return end
+        local index = 1
+        while true do
+            local aura = C_UnitAuras.GetAuraDataByIndex("player", index, "HARMFUL")
+            if not aura then break end
+            AnnounceIfCC(aura.spellId, aura.name)
+            index = index + 1
+        end
+        return
+    end
+
     if updateInfo.addedAuras then
         for _, aura in ipairs(updateInfo.addedAuras) do
             if aura.isHarmful then
@@ -81,17 +94,39 @@ end
 
 -------------------------------------------------------------------------------
 -- Classic UNIT_AURA handler (no updateInfo)
+-- Tracks active CCs to only announce absent-to-present transitions.
 -------------------------------------------------------------------------------
+
+local announcedCCs = {}  -- [spellId] = true while CC is active
 
 local function HandleClassicAura(_event, unitTarget)
     if unitTarget ~= "player" then return end
 
+    -- Build current debuff set
+    local currentCCs = {}
     local index = 1
     while true do
         local name, _, _, _, _, _, _, _, _, spellId = UnitDebuff("player", index)
         if not name then break end
-        AnnounceIfCC(spellId, name)
+        if ns.CCListener.IS_CC_SPELL[spellId] then
+            currentCCs[spellId] = name
+        end
         index = index + 1
+    end
+
+    -- Announce newly applied CCs (present now, not previously tracked)
+    for spellId, spellName in pairs(currentCCs) do
+        if not announcedCCs[spellId] then
+            announcedCCs[spellId] = true
+            AnnounceIfCC(spellId, spellName)
+        end
+    end
+
+    -- Clear expired CCs (tracked but no longer present)
+    for spellId in pairs(announcedCCs) do
+        if not currentCCs[spellId] then
+            announcedCCs[spellId] = nil
+        end
     end
 end
 
@@ -110,5 +145,6 @@ end
 
 function ns.AuraListener.Shutdown()
     ns.Addon:UnregisterEvent("UNIT_AURA")
+    wipe(announcedCCs)
     ns.DebugPrint("AuraListener shut down")
 end

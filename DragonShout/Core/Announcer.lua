@@ -132,7 +132,7 @@ function ns.Announcer.AnnounceCustom(spellId, tokens)
     local throttleDuration = db.profile.throttleDuration or 3.0
 
     for _, entry in ipairs(customSpells) do
-        if entry.spellId == spellId then
+        if tonumber(entry.spellId) == spellId then
             local throttleKey = tostring(spellId) .. "_custom"
             local lastTime = lastAnnounceTimes[throttleKey] or 0
 

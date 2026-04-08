@@ -8,6 +8,13 @@
 local ADDON_NAME, ns = ...
 
 -------------------------------------------------------------------------------
+-- Cached WoW API
+-------------------------------------------------------------------------------
+
+local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
+local select = select
+
+-------------------------------------------------------------------------------
 -- CC spell ID table
 -- Maps spell IDs to true for quick membership checks.
 -------------------------------------------------------------------------------
@@ -152,14 +159,10 @@ ns.CCListener.CC_TYPE = CC_TYPE
 -- Handler
 -------------------------------------------------------------------------------
 
-function ns.CCListener.OnAuraApplied(
-    _timestamp, _subevent, _hideCaster,
-    sourceGUID, sourceName, _sourceFlags, _sourceRaidFlags,
-    destGUID, destName, _destFlags, _destRaidFlags,
-    spellId, spellName, _spellSchool,
-    _extraSpellId, _extraSpellName, _extraSchool,
-    auraType
-)
+function ns.CCListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, destName, _, _)
+    -- Fetch suffix fields: spellId=12, spellName=13, spellSchool=14, auraType=15
+    local spellId, spellName, _, auraType = select(12, CombatLogGetCurrentEventInfo())
+
     -- Only process debuffs
     if auraType ~= "DEBUFF" then return end
 

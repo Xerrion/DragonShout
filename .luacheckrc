@@ -57,6 +57,7 @@ files["DragonShout/"] = {
         "InCombatLockdown", "IsShiftKeyDown",
         "InterfaceOptionsFrame_OpenToCategory", "Settings",
         "hooksecurefunc",
+        "GetSpellInfo", "C_Spell",
 
         -- WoW Globals
         "WOW_PROJECT_ID", "WOW_PROJECT_MAINLINE",
