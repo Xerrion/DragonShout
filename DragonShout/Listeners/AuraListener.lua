@@ -12,6 +12,7 @@ local ADDON_NAME, ns = ...
 -------------------------------------------------------------------------------
 
 local GetTime = GetTime
+local math_floor = math.floor
 local UnitDebuff = UnitDebuff
 local C_UnitAuras = C_UnitAuras  -- nil on Classic, guarded below
 
@@ -42,7 +43,7 @@ end
 -- Announce CC on player (shared logic)
 -------------------------------------------------------------------------------
 
-local function AnnounceIfCC(spellId, spellName)
+local function AnnounceIfCC(spellId, spellName, duration)
     if not spellId then return end
 
     local IS_CC_SPELL = ns.CCListener.IS_CC_SPELL
@@ -53,13 +54,19 @@ local function AnnounceIfCC(spellId, spellName)
     if not db then return end
 
     local ccType = ns.CCListener.CC_TYPE[spellId]
+    if not ccType then return end
     local categoryConfig = db.profile.ccOnYou
 
     -- Check sub-toggle for specific CC type
-    if ccType and categoryConfig[ccType] == false then return end
+    if categoryConfig[ccType] == false then return end
+
+    local typeLabel = ns.CCListener.CC_TYPE_LABEL[ccType] or ""
+    local durationStr = (duration and duration > 0) and tostring(math_floor(duration)) or nil
 
     ns.Announcer.Announce("ccOnYou", spellId, {
         spell = spellName or "Unknown",
+        type = typeLabel,
+        duration = durationStr,
     })
 end
 
@@ -77,7 +84,7 @@ local function HandleRetailAura(_event, unitTarget, updateInfo)
         while true do
             local aura = C_UnitAuras.GetAuraDataByIndex("player", index, "HARMFUL")
             if not aura then break end
-            AnnounceIfCC(aura.spellId, aura.name)
+            AnnounceIfCC(aura.spellId, aura.name, aura.duration)
             index = index + 1
         end
         return
@@ -86,7 +93,7 @@ local function HandleRetailAura(_event, unitTarget, updateInfo)
     if updateInfo.addedAuras then
         for _, aura in ipairs(updateInfo.addedAuras) do
             if aura.isHarmful then
-                AnnounceIfCC(aura.spellId, aura.name)
+                AnnounceIfCC(aura.spellId, aura.name, aura.duration)
             end
         end
     end
@@ -97,7 +104,7 @@ end
 -- Tracks active CCs to only announce absent-to-present transitions.
 -------------------------------------------------------------------------------
 
-local announcedCCs = {}  -- [spellId] = true while CC is active
+local announcedCCs = {}  -- spellId -> true: guards against re-announcing same CC before expiry
 
 local function HandleClassicAura(_event, unitTarget)
     if unitTarget ~= "player" then return end
@@ -106,19 +113,19 @@ local function HandleClassicAura(_event, unitTarget)
     local currentCCs = {}
     local index = 1
     while true do
-        local name, _, _, _, _, _, _, _, _, spellId = UnitDebuff("player", index)
+        local name, _, _, _, duration, _, _, _, _, spellId = UnitDebuff("player", index)
         if not name then break end
         if ns.CCListener.IS_CC_SPELL[spellId] then
-            currentCCs[spellId] = name
+            currentCCs[spellId] = { name = name, duration = duration }
         end
         index = index + 1
     end
 
     -- Announce newly applied CCs (present now, not previously tracked)
-    for spellId, spellName in pairs(currentCCs) do
+    for spellId, auraInfo in pairs(currentCCs) do
         if not announcedCCs[spellId] then
             announcedCCs[spellId] = true
-            AnnounceIfCC(spellId, spellName)
+            AnnounceIfCC(spellId, auraInfo.name, auraInfo.duration)
         end
     end
 

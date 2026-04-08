@@ -12,7 +12,10 @@ local ADDON_NAME, ns = ...
 -------------------------------------------------------------------------------
 
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
+local math_floor = math.floor
 local select = select
+local UnitDebuff = UnitDebuff
+local C_UnitAuras = C_UnitAuras  -- nil on Classic; nil-safe
 
 -------------------------------------------------------------------------------
 -- CC spell ID table
@@ -148,12 +151,61 @@ local CC_TYPE = {
 }
 
 -------------------------------------------------------------------------------
+-- Display labels for CC types (used as {type} token value)
+-------------------------------------------------------------------------------
+
+local CC_TYPE_LABEL = {
+    silence   = "Silenced",
+    stun      = "Stunned",
+    polymorph = "Polymorphed",
+    disorient = "Disoriented",
+    fear      = "Feared",
+    root      = "Rooted",
+}
+
+-------------------------------------------------------------------------------
+-- Duration lookup helper
+-- Returns the total duration (seconds) of a specific debuff on the player,
+-- or nil if the aura is not found.
+-- NOTE: Called immediately on SPELL_AURA_APPLIED. The aura may not yet be
+-- reflected in UnitDebuff/C_UnitAuras on the same frame. If lookup returns nil,
+-- AuraListener will fire on the subsequent UNIT_AURA and announce with duration.
+-------------------------------------------------------------------------------
+
+local function GetPlayerCCDuration(spellId)
+    if ns.IS_RETAIL then
+        if not C_UnitAuras then return nil end
+        local index = 1
+        while true do
+            local aura = C_UnitAuras.GetAuraDataByIndex("player", index, "HARMFUL")
+            if not aura then break end
+            if aura.spellId == spellId then
+                return aura.duration
+            end
+            index = index + 1
+        end
+    else
+        local index = 1
+        while true do
+            local name, _, _, _, duration, _, _, _, _, sid = UnitDebuff("player", index)
+            if not name then break end
+            if sid == spellId then
+                return duration
+            end
+            index = index + 1
+        end
+    end
+    return nil
+end
+
+-------------------------------------------------------------------------------
 -- Export for AuraListener
 -------------------------------------------------------------------------------
 
 ns.CCListener = {}
 ns.CCListener.IS_CC_SPELL = IS_CC_SPELL
 ns.CCListener.CC_TYPE = CC_TYPE
+ns.CCListener.CC_TYPE_LABEL = CC_TYPE_LABEL
 
 -------------------------------------------------------------------------------
 -- Handler
@@ -176,26 +228,37 @@ function ns.CCListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, des
     -- CC applied TO the player
     if destGUID == ns.playerGUID then
         local ccType = CC_TYPE[spellId]
-        local categoryConfig = db.profile.ccOnYou
+        if ccType then
+            local categoryConfig = db.profile.ccOnYou
+            if categoryConfig[ccType] ~= false then
+                local typeLabel = CC_TYPE_LABEL[ccType] or ""
+                local rawDuration = GetPlayerCCDuration(spellId)
+                local durationStr = (rawDuration and rawDuration > 0)
+                    and tostring(math_floor(rawDuration)) or nil
 
-        -- Check sub-toggle for specific CC type
-        if ccType and categoryConfig[ccType] == false then return end
-
-        ns.Announcer.Announce("ccOnYou", spellId, {
-            spell = spellName,
-            source = sourceName,
-        })
+                ns.Announcer.Announce("ccOnYou", spellId, {
+                    spell = spellName,
+                    source = sourceName,
+                    type = typeLabel,
+                    duration = durationStr,
+                })
+            end
+        end
     end
 
     -- CC applied BY the player
     if sourceGUID == ns.playerGUID then
-        ns.Announcer.Announce("ccApplied", spellId, {
-            spell = spellName,
-            target = destName,
-        })
+        local ccType = CC_TYPE[spellId]
+        if ccType then
+            ns.Announcer.Announce("ccApplied", spellId, {
+                spell = spellName,
+                target = destName,
+                type = CC_TYPE_LABEL[ccType] or "",
+            })
+        end
     end
 
-    -- Check custom spells
+    -- Check custom spells (always runs, independent of CC type classification)
     ns.Announcer.AnnounceCustom(spellId, {
         spell = spellName,
         target = destName,

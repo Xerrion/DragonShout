@@ -61,7 +61,7 @@ local function CreateContent(parent)
 
     local templateInput = W.CreateTextInput(parent, {
         label = L["Template"],
-        tooltip = L["Announcement template. Tokens: {spell}"],
+        tooltip = L["Announcement template. Tokens: {spell}, {type}, {duration}"],
         get = function() return db.profile.ccOnYou.template end,
         set = function(value) db.profile.ccOnYou.template = value end,
     })

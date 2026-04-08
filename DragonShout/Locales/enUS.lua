@@ -47,7 +47,7 @@ L["Toggle on/off"] = true
 
 -- Default template strings (used as config defaults and locale keys)
 L["Interrupted {target}'s {extraSpell} with {spell}!"] = true
-L["I am {spell}!"] = true
+L["I am {spell} ({type}) for {duration}s!"] = true
 L["CC'd {target} with {spell}!"] = true
 L["Dispelled {extraSpell} from {target}!"] = true
 
@@ -80,7 +80,7 @@ L["Yell"] = true
 
 -- DragonShout_Options/Tabs/CCOnYouTab.lua
 L["Enable CC-on-you announcements"] = true
-L["Announcement template. Tokens: {spell}"] = true
+L["Announcement template. Tokens: {spell}, {type}, {duration}"] = true
 L["CC Types"] = true
 L["Silence"] = true
 L["Polymorph"] = true
@@ -94,6 +94,12 @@ L["Announce when stunned"] = true
 L["Announce when disoriented"] = true
 L["Announce when feared"] = true
 L["Announce when rooted"] = true
+L["Silenced"] = true
+L["Stunned"] = true
+L["Polymorphed"] = true
+L["Disoriented"] = true
+L["Feared"] = true
+L["Rooted"] = true
 
 -- DragonShout_Options/Tabs/CCAppliedTab.lua
 L["Enable CC-applied announcements"] = true
