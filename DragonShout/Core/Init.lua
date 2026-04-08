@@ -41,7 +41,6 @@ ns.CombatLogListener = {}
 ns.InterruptListener = {}
 ns.CCListener = {}
 ns.DispelListener = {}
-ns.AuraListener = {}
 
 -------------------------------------------------------------------------------
 -- AceAddon Setup
@@ -98,7 +97,6 @@ local LISTENER_MODULES = {
     "InterruptListener",
     "CCListener",
     "DispelListener",
-    "AuraListener",
 }
 
 -------------------------------------------------------------------------------

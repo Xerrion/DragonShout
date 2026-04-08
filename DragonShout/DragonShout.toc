@@ -39,4 +39,3 @@ Listeners\CombatLogListener.lua
 Listeners\InterruptListener.lua
 Listeners\CCListener.lua
 Listeners\DispelListener.lua
-Listeners\AuraListener.lua

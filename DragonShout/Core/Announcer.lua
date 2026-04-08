@@ -158,7 +158,3 @@ function ns.Announcer.AnnounceCustom(spellId, tokens)
     end
 end
 
-function ns.Announcer.GetLastAnnounceTime(spellId, category)
-    local throttleKey = tostring(spellId) .. "_" .. category
-    return lastAnnounceTimes[throttleKey] or 0
-end

@@ -36,13 +36,13 @@ No local build step. BigWigsMods packager runs automatically via `packager.yml` 
 | Layer     | Directory    | Responsibility                                         |
 |-----------|--------------|--------------------------------------------------------|
 | Core      | `Core/`      | Addon lifecycle, config, announcer engine, slash cmds  |
-| Listeners | `Listeners/` | CLEU dispatcher, interrupt/CC/dispel/aura handlers     |
+| Listeners | `Listeners/` | CLEU dispatcher, interrupt/CC/dispel handlers           |
 | Locales   | `Locales/`   | AceLocale translation tables                           |
 | Libs      | `Libs/`      | Embedded Ace3 + utility libraries (never lint or edit) |
 
 ### Namespace Sub-tables
 
-All modules attach to `ns`: `ns.Addon`, `ns.Announcer`, `ns.Lifecycle`, `ns.MinimapIcon`, `ns.CombatLogListener`, `ns.InterruptListener`, `ns.CCListener`, `ns.DispelListener`, `ns.AuraListener`.
+All modules attach to `ns`: `ns.Addon`, `ns.Announcer`, `ns.Lifecycle`, `ns.MinimapIcon`, `ns.CombatLogListener`, `ns.InterruptListener`, `ns.CCListener`, `ns.DispelListener`.
 
 ### Repo Layout
 
@@ -50,7 +50,7 @@ All modules attach to `ns`: `ns.Addon`, `ns.Announcer`, `ns.Lifecycle`, `ns.Mini
 DragonShout/                    (repo root)
   DragonShout/                  (main addon - maps to DragonShout/ after packaging)
     Core/                       (lifecycle, config, announcer, slash, minimap)
-    Listeners/                  (CLEU dispatch, interrupt, CC, dispel, aura)
+    Listeners/                  (CLEU dispatch, interrupt, CC, dispel)
     Locales/                    (11 locale files)
     Libs/                       (embedded libraries)
   DragonShout_Options/          (LoadOnDemand options addon)
@@ -66,7 +66,6 @@ DragonShout/                    (repo root)
 | ccOnYou     | CCListener            | SPELL_AURA_APPLIED      | CC debuff applied to player     |
 | ccApplied   | CCListener            | SPELL_AURA_APPLIED      | Player applies CC to enemy      |
 | dispels     | DispelListener        | SPELL_DISPEL            | Player dispels an aura          |
-| (backup)    | AuraListener          | UNIT_AURA               | Redundant CC-on-player via aura |
 
 ### CLEU Event Handling Pattern
 
@@ -94,6 +93,5 @@ DragonShout/                    (repo root)
 1. `ns.playerGUID` is nil until PLAYER_LOGIN - all listeners must nil-check it
 2. `CombatLogGetCurrentEventInfo()` is the only way to read CLEU payload
 3. `SPELL_AURA_REFRESH` does NOT have an amount field at idx 16
-4. AuraListener debounces against CombatLogListener to avoid double-announce
-5. `IS_CC_SPELL` table is defined in CCListener.lua and exported as `ns.CCListener.IS_CC_SPELL`
-6. `C_ChatInfo.SendChatMessage` is Retail 11.2+ only - fallback to `SendChatMessage`
+4. `CC_TYPE[spellId] ~= nil` is the guard for CC detection in CCListener - no separate IS_CC_SPELL table exists
+5. `C_ChatInfo.SendChatMessage` is Retail 11.2+ only - fallback to `SendChatMessage`
