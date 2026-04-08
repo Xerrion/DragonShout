@@ -49,6 +49,11 @@ local function CreateContent(parent)
     LC.AnchorWidget(desc, parent, yOffset)
     yOffset = yOffset - desc:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
 
+    local tokenDesc = W.CreateDescription(parent,
+        L["Template tokens: {spell} (spell name), {target} (target unit), {source} (caster)"])
+    LC.AnchorWidget(tokenDesc, parent, yOffset)
+    yOffset = yOffset - tokenDesc:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+
     local spellIdInput = W.CreateTextInput(parent, {
         label = L["Spell ID"],
         tooltip = L["Spell ID"],

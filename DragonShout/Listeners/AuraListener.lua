@@ -67,7 +67,7 @@ local function AnnounceIfCC(spellId, spellName, duration)
         spell = spellName or "Unknown",
         type = typeLabel,
         duration = durationStr,
-    })
+    }, ccType)
 end
 
 -------------------------------------------------------------------------------

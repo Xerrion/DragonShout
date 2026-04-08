@@ -89,7 +89,7 @@ end
 -- Public API
 -------------------------------------------------------------------------------
 
-function ns.Announcer.Announce(category, spellId, tokens)
+function ns.Announcer.Announce(category, spellId, tokens, ccType)
     local db = ns.Addon.db
     if not db then return end
     if not db.profile.enabled then return end
@@ -109,8 +109,14 @@ function ns.Announcer.Announce(category, spellId, tokens)
         return
     end
 
-    -- Build and send message
+    -- Build and send message (per-type template overrides global when non-empty)
     local template = categoryConfig.template
+    if ccType and categoryConfig.typeTemplates then
+        local typeTemplate = categoryConfig.typeTemplates[ccType]
+        if typeTemplate and typeTemplate ~= "" then
+            template = typeTemplate
+        end
+    end
     local msg = ApplyTemplate(template, tokens)
     local channel = ResolveChannel(category)
 

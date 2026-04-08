@@ -95,6 +95,37 @@ local function CreateContent(parent)
         yOffset = yOffset - toggle:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
     end
 
+    -- Per-type templates section
+    yOffset = yOffset - LC.SPACING_BETWEEN_SECTIONS
+
+    local perTypeHeader = W.CreateHeader(parent, L["Per-Type Templates"])
+    LC.AnchorWidget(perTypeHeader, parent, yOffset)
+    yOffset = yOffset - perTypeHeader:GetHeight() - LC.SPACING_AFTER_HEADER
+
+    local perTypeDesc = W.CreateDescription(parent, L["Leave blank to use the default template above."])
+    LC.AnchorWidget(perTypeDesc, parent, yOffset)
+    yOffset = yOffset - perTypeDesc:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+
+    local CC_TYPE_TEMPLATES = {
+        { key = "silence",   label = L["Silence template"] },
+        { key = "polymorph", label = L["Polymorph template"] },
+        { key = "stun",      label = L["Stun template"] },
+        { key = "disorient", label = L["Disorient template"] },
+        { key = "fear",      label = L["Fear template"] },
+        { key = "root",      label = L["Root template"] },
+    }
+
+    for _, tplEntry in ipairs(CC_TYPE_TEMPLATES) do
+        local typeInput = W.CreateTextInput(parent, {
+            label = tplEntry.label,
+            tooltip = tplEntry.label,
+            get = function() return db.profile.ccOnYou.typeTemplates[tplEntry.key] or "" end,
+            set = function(value) db.profile.ccOnYou.typeTemplates[tplEntry.key] = value end,
+        })
+        LC.AnchorWidget(typeInput, parent, yOffset)
+        yOffset = yOffset - typeInput:GetHeight() - LC.SPACING_BETWEEN_WIDGETS
+    end
+
     parent:SetHeight(math_abs(yOffset) + LC.PADDING_BOTTOM)
 end
 

@@ -100,6 +100,14 @@ L["Polymorphed"] = true
 L["Disoriented"] = true
 L["Feared"] = true
 L["Rooted"] = true
+L["Per-Type Templates"] = true
+L["Leave blank to use the default template above."] = true
+L["Silence template"] = true
+L["Stun template"] = true
+L["Polymorph template"] = true
+L["Disorient template"] = true
+L["Fear template"] = true
+L["Root template"] = true
 
 -- DragonShout_Options/Tabs/CCAppliedTab.lua
 L["Enable CC-applied announcements"] = true
@@ -112,6 +120,7 @@ L["Announcement template. Tokens: {spell}, {target}, {extraSpell}"] = true
 -- DragonShout_Options/Tabs/CustomSpellsTab.lua
 L["Custom Spells"] = true
 L["Add spell IDs to announce when applied to or by you."] = true
+L["Template tokens: {spell} (spell name), {target} (target unit), {source} (caster)"] = true
 L["Spell ID"] = true
 L["Add"] = true
 L["Remove Last"] = true

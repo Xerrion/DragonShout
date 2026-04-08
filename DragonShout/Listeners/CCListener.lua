@@ -241,7 +241,7 @@ function ns.CCListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, des
                     source = sourceName,
                     type = typeLabel,
                     duration = durationStr,
-                })
+                }, ccType)
             end
         end
     end
