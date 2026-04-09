@@ -23,6 +23,8 @@ ns.COLOR_GRAY = "|cff888888"
 ns.COLOR_WHITE = "|cffffffff"
 ns.COLOR_RESET = "|r"
 
+ns._debugMode = false
+
 -------------------------------------------------------------------------------
 -- Localization
 -------------------------------------------------------------------------------
@@ -58,8 +60,8 @@ function ns.Print(msg)
 end
 
 function ns.DebugPrint(msg)
-    local db = ns.Addon.db
-    if db and db.profile and db.profile.debug then
+    local db = ns.Addon and ns.Addon.db
+    if (ns._debugMode) or (db and db.profile and db.profile.debug) then
         print(ns.COLOR_GRAY .. "[DragonShout Debug]|r " .. msg)
     end
 end

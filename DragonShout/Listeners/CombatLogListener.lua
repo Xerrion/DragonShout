@@ -12,6 +12,7 @@ local ADDON_NAME, ns = ...
 -------------------------------------------------------------------------------
 
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
+local string_format = string.format
 
 -------------------------------------------------------------------------------
 -- Sub-event dispatch table
@@ -42,6 +43,8 @@ local function OnCombatLogEvent()
 
     local handler = DISPATCH[subevent]
     if not handler then return end
+
+    ns.DebugPrint(string_format("CombatLogListener: dispatching %s", subevent))
 
     handler(sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
             destGUID, destName, destFlags, destRaidFlags)

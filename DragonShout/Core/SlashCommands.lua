@@ -12,9 +12,10 @@ local ADDON_NAME, ns = ...
 -------------------------------------------------------------------------------
 
 local print = print
+local tostring = tostring
 local string_lower = string.lower
 local string_match = string.match
-local L = LibStub("AceLocale-3.0"):GetLocale("DragonShout")
+local L = LibStub("AceLocale-3.0"):GetLocale(ADDON_NAME)
 
 -------------------------------------------------------------------------------
 -- Status Display
@@ -31,6 +32,9 @@ local function PrintStatus()
     print("  " .. L["Enabled"] .. ": " .. YesNo(db.enabled) .. ns.COLOR_RESET)
     print("  " .. L["Throttle Duration"] .. ": " .. db.throttleDuration .. L["s"])
     print("  " .. L["Minimap Icon"] .. ": " .. YesNo(not db.minimap.hide))
+    print("  " .. L["Player GUID"] .. ": " .. ns.COLOR_WHITE .. tostring(ns.playerGUID) .. ns.COLOR_RESET)
+    print("  " .. L["Version"] .. ": " .. ns.COLOR_WHITE .. (ns.IS_RETAIL and "Retail" or "Classic") .. ns.COLOR_RESET)
+    print("  " .. L["Debug Mode"] .. ": " .. YesNo(ns._debugMode or db.debug))
     print("")
     print("  " .. L["Interrupts"] .. ": " .. YesNo(db.interrupts.enabled)
         .. ns.COLOR_RESET .. " | " .. L["Channel"] .. ": " .. db.interrupts.channel)
@@ -51,6 +55,7 @@ local HELP_ENTRIES = {
     { " toggle",   L["Toggle addon on/off"] },
     { " config",   L["Open settings panel"] },
     { " status",   L["Show current settings"] },
+    { " debug",    L["Toggle debug mode on/off"] },
     { " help",     L["Show this help"] },
 }
 
@@ -74,6 +79,12 @@ local function ToggleAddon()
     ns.ToggleAddonEnabled()
 end
 
+local function ToggleDebug()
+    ns._debugMode = not ns._debugMode
+    ns.Print(L["Debug mode: "] .. (ns._debugMode and (ns.COLOR_GREEN .. L["Yes"]) or (ns.COLOR_RED .. L["No"]))
+        .. ns.COLOR_RESET)
+end
+
 function ns.HandleSlashCommand(input)
     local cmd = NormalizeCommand(input)
 
@@ -90,6 +101,9 @@ function ns.HandleSlashCommand(input)
 
     elseif cmd == "status" then
         PrintStatus()
+
+    elseif cmd == "debug" then
+        ToggleDebug()
 
     elseif cmd == "help" or cmd == "?" then
         PrintHelp()

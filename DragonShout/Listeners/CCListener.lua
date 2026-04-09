@@ -14,6 +14,8 @@ local ADDON_NAME, ns = ...
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local math_floor = math.floor
 local select = select
+local string_format = string.format
+local tostring = tostring
 local UnitDebuff = UnitDebuff
 local C_UnitAuras = C_UnitAuras  -- nil on Classic; nil-safe
 
@@ -98,11 +100,6 @@ local CC_TYPE_LABEL = {
 
 -------------------------------------------------------------------------------
 -- Duration lookup helper
--- Returns the total duration (seconds) of a specific debuff on the player,
--- or nil if the aura is not found.
--- NOTE: Called immediately on SPELL_AURA_APPLIED. The aura may not yet be
--- reflected in UnitDebuff/C_UnitAuras on the same frame; if lookup returns
--- nil the duration token is omitted from the announcement.
 -------------------------------------------------------------------------------
 
 local function GetPlayerCCDuration(spellId)
@@ -136,23 +133,29 @@ end
 -------------------------------------------------------------------------------
 
 function ns.CCListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, destName, _, _)
-    -- Fetch suffix fields: spellId=12, spellName=13, spellSchool=14, auraType=15
     local spellId, spellName, _, auraType = select(12, CombatLogGetCurrentEventInfo())
 
-    -- Only process debuffs
+    ns.DebugPrint(string_format("CCListener: auraType=%s spellId=%s", tostring(auraType), tostring(spellId)))
+
     if auraType ~= "DEBUFF" then return end
 
-    -- Only process known CC spells
-    if not CC_TYPE[spellId] then return end
-    if not ns.playerGUID then return end
+    if not CC_TYPE[spellId] then
+        ns.DebugPrint(string_format("CCListener: spellId=%s not in CC_TYPE", tostring(spellId)))
+        return
+    end
 
-    local db = ns.Addon.db
+    if not ns.playerGUID then
+        ns.DebugPrint("CCListener: playerGUID is nil, skipping")
+        return
+    end
+
+    local db = ns.Addon and ns.Addon.db
     if not db then return end
 
-    local ccType = CC_TYPE[spellId]  -- known non-nil: guarded by CC_TYPE check above
+    local ccType = CC_TYPE[spellId]
 
-    -- CC applied TO the player
     if destGUID == ns.playerGUID then
+        ns.DebugPrint(string_format("CCListener: CC on player - spellId=%s type=%s", tostring(spellId), tostring(ccType)))
         local categoryConfig = db.profile.ccOnYou
         if categoryConfig[ccType] ~= false then
             local typeLabel = CC_TYPE_LABEL[ccType] or ""
@@ -169,8 +172,8 @@ function ns.CCListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, des
         end
     end
 
-    -- CC applied BY the player
     if sourceGUID == ns.playerGUID then
+        ns.DebugPrint(string_format("CCListener: CC applied by player - spellId=%s target=%s", tostring(spellId), tostring(destName)))
         ns.Announcer.Announce("ccApplied", spellId, {
             spell = spellName,
             target = destName,
@@ -178,10 +181,12 @@ function ns.CCListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, des
         })
     end
 
-    -- Check custom spells (always runs, independent of CC type classification)
-    ns.Announcer.AnnounceCustom(spellId, {
-        spell = spellName,
-        target = destName,
-        source = sourceName,
-    })
+    -- Only fire custom announce if the player was involved (source or dest)
+    if destGUID == ns.playerGUID or sourceGUID == ns.playerGUID then
+        ns.Announcer.AnnounceCustom(spellId, {
+            spell = spellName,
+            target = destName,
+            source = sourceName,
+        })
+    end
 end

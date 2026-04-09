@@ -13,6 +13,8 @@ local ADDON_NAME, ns = ...
 
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local select = select
+local string_format = string.format
+local tostring = tostring
 local GetSpellInfo = GetSpellInfo
 local C_Spell = C_Spell
 
@@ -20,7 +22,6 @@ local C_Spell = C_Spell
 -- Helpers
 -------------------------------------------------------------------------------
 
---- Resolve a spell name from its ID, supporting both Retail and Classic APIs.
 local function GetSpellName(spellId)
     if C_Spell and C_Spell.GetSpellName then
         return C_Spell.GetSpellName(spellId)
@@ -38,10 +39,15 @@ end
 ns.InterruptListener = {}
 
 function ns.InterruptListener.OnInterrupt(sourceGUID, sourceName, _, _, _, destName, _, _)
-    if not ns.playerGUID then return end
-    if sourceGUID ~= ns.playerGUID then return end
+    if not ns.playerGUID then
+        ns.DebugPrint("InterruptListener: playerGUID is nil, skipping")
+        return
+    end
+    if sourceGUID ~= ns.playerGUID then
+        ns.DebugPrint(string_format("InterruptListener: sourceGUID %s != playerGUID %s", tostring(sourceGUID), tostring(ns.playerGUID)))
+        return
+    end
 
-    -- SPELL_INTERRUPT suffix: [12]=spellId [13]=spellName [14]=spellSchool [15]=extraSpellId [16]=extraSpellSchool
     local spellId, spellName, _, extraSpellId = select(12, CombatLogGetCurrentEventInfo())
     local extraSpellName = GetSpellName(extraSpellId)
 
@@ -51,4 +57,6 @@ function ns.InterruptListener.OnInterrupt(sourceGUID, sourceName, _, _, _, destN
         source = sourceName,
         extraSpell = extraSpellName,
     })
+
+    ns.DebugPrint(string_format("InterruptListener: interrupt detected spellId=%s target=%s", tostring(spellId), tostring(destName)))
 end

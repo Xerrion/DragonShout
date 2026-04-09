@@ -37,6 +37,17 @@ L["Show current settings"] = true
 L["Addon enabled"] = true
 L["Addon disabled"] = true
 L["Unknown command: "] = true
+L["Debug"] = true
+L["Debug Mode"] = true
+L["Enable verbose debug logging to chat"] = true
+L["Print Status"] = true
+L["Print current addon state to chat"] = true
+L["Clear Throttle"] = true
+L["Reset all announce throttle timers"] = true
+L["Player GUID"] = true
+L["Version"] = true
+L["Toggle debug mode on/off"] = true
+L["Debug mode: "] = true
 
 -- DragonShout/Core/MinimapIcon.lua
 L["Status: "] = true
@@ -67,6 +78,8 @@ L["Test Interrupt"] = true
 L["Simulate an interrupt announcement"] = true
 L["Test CC"] = true
 L["Simulate a CC announcement"] = true
+L["Debug Settings"] = true
+L["Enable Debug Mode"] = true
 
 -- DragonShout_Options/Tabs/InterruptsTab.lua
 L["Enable interrupt announcements"] = true

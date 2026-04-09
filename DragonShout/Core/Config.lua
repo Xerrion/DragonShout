@@ -30,14 +30,14 @@ local defaults = {
         ccOnYou = {
             enabled = true,
             channel = "AUTO",
-            template = "I am {spell} ({type}) for {duration}s!",
+            template = "{type} for {duration}s!",
             typeTemplates = {
-                silence   = "",
-                polymorph = "",
-                stun      = "",
-                disorient = "",
-                fear      = "",
-                root      = "",
+                silence   = "Silenced for {duration}s!",
+                polymorph = "Polymorphed for {duration}s!",
+                stun      = "Stunned for {duration}s!",
+                disorient = "Disoriented for {duration}s!",
+                fear      = "Feared for {duration}s!",
+                root      = "Rooted for {duration}s!",
             },
             silence = true,
             polymorph = true,
@@ -64,6 +64,19 @@ local defaults = {
 }
 
 -------------------------------------------------------------------------------
+-- Migration helpers
+-------------------------------------------------------------------------------
+
+local TYPE_TEMPLATE_DEFAULTS = {
+    silence   = "Silenced for {duration}s!",
+    polymorph = "Polymorphed for {duration}s!",
+    stun      = "Stunned for {duration}s!",
+    disorient = "Disoriented for {duration}s!",
+    fear      = "Feared for {duration}s!",
+    root      = "Rooted for {duration}s!",
+}
+
+-------------------------------------------------------------------------------
 -- Schema Migration
 -------------------------------------------------------------------------------
 
@@ -73,6 +86,24 @@ local function MigrateProfile(db)
 
     if version < 1 then
         profile.schemaVersion = 1
+    end
+
+    if version < 2 then
+        -- Migrate ccOnYou.template from old default to new default
+        if profile.ccOnYou and profile.ccOnYou.template == "I am {spell} ({type}) for {duration}s!" then
+            profile.ccOnYou.template = "{type} for {duration}s!"
+        end
+
+        -- Migrate empty typeTemplates to new per-type defaults
+        if profile.ccOnYou and profile.ccOnYou.typeTemplates then
+            for ccType, defaultStr in pairs(TYPE_TEMPLATE_DEFAULTS) do
+                if profile.ccOnYou.typeTemplates[ccType] == "" then
+                    profile.ccOnYou.typeTemplates[ccType] = defaultStr
+                end
+            end
+        end
+
+        profile.schemaVersion = 2
     end
 end
 

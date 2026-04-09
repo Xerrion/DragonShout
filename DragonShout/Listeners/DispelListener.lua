@@ -13,6 +13,8 @@ local ADDON_NAME, ns = ...
 
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local select = select
+local string_format = string.format
+local tostring = tostring
 
 -------------------------------------------------------------------------------
 -- Module
@@ -21,8 +23,14 @@ local select = select
 ns.DispelListener = {}
 
 function ns.DispelListener.OnDispel(sourceGUID, sourceName, _, _, _, destName, _, _)
-    if not ns.playerGUID then return end
-    if sourceGUID ~= ns.playerGUID then return end
+    if not ns.playerGUID then
+        ns.DebugPrint("DispelListener: playerGUID is nil, skipping")
+        return
+    end
+    if sourceGUID ~= ns.playerGUID then
+        ns.DebugPrint(string_format("DispelListener: sourceGUID %s != playerGUID %s", tostring(sourceGUID), tostring(ns.playerGUID)))
+        return
+    end
 
     local spellId, spellName, _, _, extraSpellName = select(12, CombatLogGetCurrentEventInfo())
 
@@ -32,4 +40,6 @@ function ns.DispelListener.OnDispel(sourceGUID, sourceName, _, _, _, destName, _
         source = sourceName,
         extraSpell = extraSpellName,
     })
+
+    ns.DebugPrint(string_format("DispelListener: dispel detected spellId=%s target=%s", tostring(spellId), tostring(destName)))
 end

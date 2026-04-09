@@ -11,13 +11,15 @@ local ADDON_NAME, ns = ...
 -- Cached WoW API
 -------------------------------------------------------------------------------
 
+local tostring = tostring
 local GetTime = GetTime
 local IsInGroup = IsInGroup
 local IsInRaid = IsInRaid
 local SendChatMessage = SendChatMessage
-local C_ChatInfo = C_ChatInfo
 local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
 local string_gsub = string.gsub
+local string_format = string.format
+local wipe = wipe
 
 -------------------------------------------------------------------------------
 -- Module state
@@ -28,9 +30,6 @@ local lastAnnounceTimes = {}
 
 -------------------------------------------------------------------------------
 -- Channel Resolution
--- Determines the appropriate chat channel based on category config and
--- current group state. "AUTO" smartly picks INSTANCE_CHAT, RAID, PARTY,
--- or SAY depending on group membership.
 -------------------------------------------------------------------------------
 
 local function ResolveChannel(category)
@@ -43,7 +42,6 @@ local function ResolveChannel(category)
         return channelSetting
     end
 
-    -- AUTO resolution: instance > raid > party > say
     if LE_PARTY_CATEGORY_INSTANCE and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
         return "INSTANCE_CHAT"
     elseif IsInRaid() then
@@ -57,59 +55,66 @@ end
 
 -------------------------------------------------------------------------------
 -- Template Substitution
--- Replaces {spell}, {target}, {source}, {extraSpell} tokens with values
--- from the tokens table. Unreplaced tokens remain intact.
 -------------------------------------------------------------------------------
 
 local function ApplyTemplate(template, tokens)
     if not template or not tokens then return template end
 
     return string_gsub(template, "{(%w+)}", function(key)
-        return tokens[key] or ("{" .. key .. "}")
+        return tokens[key] ~= nil and tostring(tokens[key]) or ""
     end)
 end
 
 -------------------------------------------------------------------------------
 -- Send Message
--- Uses C_ChatInfo.SendChatMessage on Retail 11.2+, falls back to
--- SendChatMessage on Classic.
 -------------------------------------------------------------------------------
 
 local function SendMessage(channel, msg)
     if not msg or msg == "" then return end
-
-    if C_ChatInfo and C_ChatInfo.SendChatMessage then
-        C_ChatInfo.SendChatMessage(msg, channel)
-    else
-        SendChatMessage(msg, channel)
-    end
+    SendChatMessage(msg, channel)
 end
 
 -------------------------------------------------------------------------------
 -- Public API
 -------------------------------------------------------------------------------
 
-function ns.Announcer.Announce(category, spellId, tokens, ccType)
-    local db = ns.Addon.db
-    if not db then return end
-    if not db.profile.enabled then return end
-
-    local categoryConfig = db.profile[category]
-    if not categoryConfig then return end
-    if not categoryConfig.enabled then return end
-
-    -- Throttle check
-    local throttleDuration = db.profile.throttleDuration or 3.0
-    local throttleKey = tostring(spellId) .. "_" .. category
-    local now = GetTime()
-    local lastTime = lastAnnounceTimes[throttleKey] or 0
-
-    if (now - lastTime) < throttleDuration then
-        ns.DebugPrint("Throttled: " .. category .. " spellId=" .. tostring(spellId))
+function ns.Announcer.Announce(category, spellId, tokens, ccType, noThrottle)
+    local db = ns.Addon and ns.Addon.db
+    if not db then
+        ns.DebugPrint("Announce: no db")
+        return
+    end
+    if not db.profile.enabled then
+        ns.DebugPrint("Announce: addon disabled")
         return
     end
 
-    -- Build and send message (per-type template overrides global when non-empty)
+    local categoryConfig = db.profile[category]
+    if not categoryConfig then
+        ns.DebugPrint(string_format("Announce: unknown category '%s'", tostring(category)))
+        return
+    end
+    if not categoryConfig.enabled then
+        ns.DebugPrint(string_format("Announce: category '%s' disabled", category))
+        return
+    end
+
+    -- Throttle check (skip when noThrottle is true)
+    if not noThrottle then
+        local throttleDuration = db.profile.throttleDuration or 3.0
+        local throttleKey = tostring(spellId) .. "_" .. category
+        local now = GetTime()
+        local lastTime = lastAnnounceTimes[throttleKey] or 0
+
+        if (now - lastTime) < throttleDuration then
+            ns.DebugPrint(string_format("Announce: throttled category='%s' spellId=%s", category, tostring(spellId)))
+            return
+        end
+
+        lastAnnounceTimes[throttleKey] = now
+    end
+
+    -- Build and send message
     local template = categoryConfig.template
     if ccType and categoryConfig.typeTemplates then
         local typeTemplate = categoryConfig.typeTemplates[ccType]
@@ -121,13 +126,12 @@ function ns.Announcer.Announce(category, spellId, tokens, ccType)
     local channel = ResolveChannel(category)
 
     SendMessage(channel, msg)
-    lastAnnounceTimes[throttleKey] = now
 
-    ns.DebugPrint("Announced [" .. category .. "] -> " .. channel .. ": " .. msg)
+    ns.DebugPrint(string_format("Announce: [%s] -> %s: %s", category, channel, tostring(msg)))
 end
 
 function ns.Announcer.AnnounceCustom(spellId, tokens)
-    local db = ns.Addon.db
+    local db = ns.Addon and ns.Addon.db
     if not db then return end
     if not db.profile.enabled then return end
 
@@ -152,9 +156,17 @@ function ns.Announcer.AnnounceCustom(spellId, tokens)
                 SendMessage(channel, msg)
                 lastAnnounceTimes[throttleKey] = now
 
-                ns.DebugPrint("Custom announced spellId=" .. tostring(spellId) .. " -> " .. channel)
+                ns.DebugPrint(string_format(
+                    "AnnounceCustom: spellId=%s -> %s: %s", tostring(spellId), channel, tostring(msg)
+                ))
+            else
+                ns.DebugPrint(string_format("AnnounceCustom: throttled spellId=%s", tostring(spellId)))
             end
         end
     end
 end
 
+function ns.Announcer.ClearThrottle()
+    wipe(lastAnnounceTimes)
+    ns.DebugPrint("Throttle table cleared")
+end
