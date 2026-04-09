@@ -48,14 +48,32 @@ local function CreateContent(parent)
     })
     innerY = LC.AnchorWidget(enableToggle, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
-    local channelDropdown = W.CreateDropdown(content, {
-        label = L["Channel"],
-        tooltip = L["Chat channel to send announcements to"],
+    local soloDropdown = W.CreateDropdown(content, {
+        label = L["Solo Channel"],
+        tooltip = L["Channel used when not in any group (LOCAL prints only to your own chat frame)"],
         values = ns.CHANNEL_VALUES,
-        get = function() return db.profile.interrupts.channel end,
-        set = function(value) db.profile.interrupts.channel = value end,
+        get = function() return db.profile.interrupts.channelSolo end,
+        set = function(value) db.profile.interrupts.channelSolo = value end,
     })
-    innerY = LC.AnchorWidget(channelDropdown, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
+    innerY = LC.AnchorWidget(soloDropdown, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
+
+    local groupDropdown = W.CreateDropdown(content, {
+        label = L["Group Channel"],
+        tooltip = L["Channel used when in a party"],
+        values = ns.CHANNEL_VALUES,
+        get = function() return db.profile.interrupts.channelGroup end,
+        set = function(value) db.profile.interrupts.channelGroup = value end,
+    })
+    innerY = LC.AnchorWidget(groupDropdown, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
+
+    local raidDropdown = W.CreateDropdown(content, {
+        label = L["Raid/Instance Channel"],
+        tooltip = L["Channel used when in a raid or instance group"],
+        values = ns.CHANNEL_VALUES,
+        get = function() return db.profile.interrupts.channelRaid end,
+        set = function(value) db.profile.interrupts.channelRaid = value end,
+    })
+    innerY = LC.AnchorWidget(raidDropdown, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
 
     local templateInput = W.CreateTextInput(content, {
         label = L["Template"],

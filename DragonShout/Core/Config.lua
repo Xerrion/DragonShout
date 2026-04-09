@@ -23,13 +23,17 @@ local defaults = {
 
         interrupts = {
             enabled = true,
-            channel = "AUTO",
+            channelSolo = "LOCAL",
+            channelGroup = "PARTY",
+            channelRaid = "RAID",
             template = "Interrupted {target}'s {extraSpell} with {spell}!",
         },
 
         ccOnYou = {
             enabled = true,
-            channel = "AUTO",
+            channelSolo = "LOCAL",
+            channelGroup = "PARTY",
+            channelRaid = "RAID",
             template = "{type} for {duration}s!",
             typeTemplates = {
                 silence   = "Silenced for {duration}s!",
@@ -49,13 +53,17 @@ local defaults = {
 
         ccApplied = {
             enabled = true,
-            channel = "AUTO",
+            channelSolo = "LOCAL",
+            channelGroup = "PARTY",
+            channelRaid = "RAID",
             template = "CC'd {target} with {spell}!",
         },
 
         dispels = {
             enabled = true,
-            channel = "AUTO",
+            channelSolo = "LOCAL",
+            channelGroup = "PARTY",
+            channelRaid = "RAID",
             template = "Dispelled {extraSpell} from {target}!",
         },
 
@@ -104,6 +112,25 @@ local function MigrateProfile(db)
         end
 
         profile.schemaVersion = 2
+    end
+
+    if version < 3 then
+        local categories = { "interrupts", "ccOnYou", "ccApplied", "dispels" }
+        for _, cat in ipairs(categories) do
+            local cfg = profile[cat]
+            if cfg and cfg.channel then
+                local old = cfg.channel
+                local solo  = (old == "AUTO" or old == nil) and "LOCAL" or old
+                local group = (old == "AUTO" or old == nil) and "PARTY" or old
+                local raid  = (old == "AUTO" or old == nil) and "RAID"  or old
+                cfg.channelSolo  = cfg.channelSolo  or solo
+                cfg.channelGroup = cfg.channelGroup or group
+                cfg.channelRaid  = cfg.channelRaid  or raid
+                cfg.channel = nil
+            end
+        end
+        version = 3 -- luacheck: ignore 311/version (future migrations will read this)
+        profile.schemaVersion = 3
     end
 end
 

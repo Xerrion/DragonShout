@@ -46,11 +46,13 @@ local L = ns.L
 -------------------------------------------------------------------------------
 
 ns.CHANNEL_VALUES = {
-    { value = "AUTO",  text = L["Auto"] },
-    { value = "PARTY", text = L["Party"] },
-    { value = "RAID",  text = L["Raid"] },
-    { value = "SAY",   text = L["Say"] },
-    { value = "YELL",  text = L["Yell"] },
+    { value = "LOCAL",         text = L["Local"] },
+    { value = "PARTY",         text = L["Party"] },
+    { value = "RAID",          text = L["Raid"] },
+    { value = "INSTANCE_CHAT", text = L["Instance"] },
+    { value = "SAY",           text = L["Say"] },
+    { value = "YELL",          text = L["Yell"] },
+    { value = "OFFICER",       text = L["Officer"] },
 }
 
 -------------------------------------------------------------------------------
