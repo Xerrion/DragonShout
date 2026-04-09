@@ -36,6 +36,9 @@ L["Open settings panel"] = true
 L["Show current settings"] = true
 L["Addon enabled"] = true
 L["Addon disabled"] = true
+L["Solo"] = true
+L["Group"] = true
+L["Addon not yet initialized."] = true
 L["Unknown command: "] = true
 L["Debug"] = true
 L["Debug Mode"] = true
@@ -90,6 +93,15 @@ L["Party"] = true
 L["Raid"] = true
 L["Say"] = true
 L["Yell"] = true
+L["Local"] = true
+L["Instance"] = true
+L["Officer"] = true
+L["Solo Channel"] = true
+L["Group Channel"] = true
+L["Raid/Instance Channel"] = true
+L["Channel used when not in any group (LOCAL prints only to your own chat frame)"] = true
+L["Channel used when in a party"] = true
+L["Channel used when in a raid or instance group"] = true
 
 -- DragonShout_Options/Tabs/CCOnYouTab.lua
 L["Enable CC-on-you announcements"] = true

@@ -26,6 +26,21 @@ local wipe = wipe
 -------------------------------------------------------------------------------
 
 ns.Announcer = {}
+
+-------------------------------------------------------------------------------
+-- Group context helper
+-- Returns "raid", "group", or "solo" based on current group membership.
+-------------------------------------------------------------------------------
+
+local function GetGroupContext()
+    if LE_PARTY_CATEGORY_INSTANCE and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+        return "raid"
+    end
+    if IsInRaid() then return "raid" end
+    if IsInGroup() then return "group" end
+    return "solo"
+end
+
 local lastAnnounceTimes = {}
 
 -------------------------------------------------------------------------------
@@ -34,23 +49,19 @@ local lastAnnounceTimes = {}
 
 local function ResolveChannel(category)
     local db = ns.Addon and ns.Addon.db
-    if not db then return "SAY" end
+    if not db then return "LOCAL" end
 
-    local channelSetting = db.profile[category] and db.profile[category].channel or "AUTO"
+    local categoryConfig = db.profile[category]
+    if not categoryConfig then return "LOCAL" end
 
-    if channelSetting ~= "AUTO" then
-        return channelSetting
+    local ctx = GetGroupContext()
+    if ctx == "raid" then
+        return categoryConfig.channelRaid or "RAID"
+    elseif ctx == "group" then
+        return categoryConfig.channelGroup or "PARTY"
+    else
+        return categoryConfig.channelSolo or "LOCAL"
     end
-
-    if LE_PARTY_CATEGORY_INSTANCE and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
-        return "INSTANCE_CHAT"
-    elseif IsInRaid() then
-        return "RAID"
-    elseif IsInGroup() then
-        return "PARTY"
-    end
-
-    return "SAY"
 end
 
 -------------------------------------------------------------------------------
@@ -71,6 +82,10 @@ end
 
 local function SendMessage(channel, msg)
     if not msg or msg == "" then return end
+    if channel == "LOCAL" then
+        ns.Print(msg)
+        return
+    end
     SendChatMessage(msg, channel)
 end
 
@@ -149,7 +164,14 @@ function ns.Announcer.AnnounceCustom(spellId, tokens)
             if (now - lastTime) >= throttleDuration then
                 local channel = entry.channel or "AUTO"
                 if channel == "AUTO" then
-                    channel = ResolveChannel("customSpells")
+                    local ctx = GetGroupContext()
+                    if ctx == "raid" then
+                        channel = "RAID"
+                    elseif ctx == "group" then
+                        channel = "PARTY"
+                    else
+                        channel = "LOCAL"
+                    end
                 end
 
                 local msg = ApplyTemplate(entry.template or "", tokens)

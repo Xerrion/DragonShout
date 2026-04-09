@@ -25,7 +25,19 @@ local function YesNo(cond)
     return cond and ns.COLOR_GREEN .. L["Yes"] or ns.COLOR_RED .. L["No"]
 end
 
+local function PrintCategory(label, cfg)
+    print("  " .. label .. ": " .. YesNo(cfg.enabled)
+        .. ns.COLOR_RESET .. " | " .. L["Solo"] .. ": " .. tostring(cfg.channelSolo)
+        .. " " .. L["Group"] .. ": " .. tostring(cfg.channelGroup)
+        .. " " .. L["Raid"] .. ": " .. tostring(cfg.channelRaid))
+end
+
 local function PrintStatus()
+    if not (ns.Addon and ns.Addon.db) then
+        ns.Print(L["Addon not yet initialized."])
+        return
+    end
+
     local db = ns.Addon.db.profile
 
     print(ns.COLOR_GOLD .. L["--- DragonShout Status ---"] .. ns.COLOR_RESET)
@@ -36,14 +48,10 @@ local function PrintStatus()
     print("  " .. L["Version"] .. ": " .. ns.COLOR_WHITE .. (ns.IS_RETAIL and "Retail" or "Classic") .. ns.COLOR_RESET)
     print("  " .. L["Debug Mode"] .. ": " .. YesNo(ns._debugMode or db.debug))
     print("")
-    print("  " .. L["Interrupts"] .. ": " .. YesNo(db.interrupts.enabled)
-        .. ns.COLOR_RESET .. " | " .. L["Channel"] .. ": " .. db.interrupts.channel)
-    print("  " .. L["CC on You"] .. ": " .. YesNo(db.ccOnYou.enabled)
-        .. ns.COLOR_RESET .. " | " .. L["Channel"] .. ": " .. db.ccOnYou.channel)
-    print("  " .. L["CC Applied"] .. ": " .. YesNo(db.ccApplied.enabled)
-        .. ns.COLOR_RESET .. " | " .. L["Channel"] .. ": " .. db.ccApplied.channel)
-    print("  " .. L["Dispels"] .. ": " .. YesNo(db.dispels.enabled)
-        .. ns.COLOR_RESET .. " | " .. L["Channel"] .. ": " .. db.dispels.channel)
+    PrintCategory(L["Interrupts"], db.interrupts)
+    PrintCategory(L["CC on You"], db.ccOnYou)
+    PrintCategory(L["CC Applied"], db.ccApplied)
+    PrintCategory(L["Dispels"], db.dispels)
 end
 
 -------------------------------------------------------------------------------
