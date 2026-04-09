@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- CCListener.lua
+-- AuraListener.lua
 -- Handles CC detection from SPELL_AURA_APPLIED sub-events
 --
 -- Supported versions: Retail, MoP Classic, TBC Anniversary
@@ -132,20 +132,20 @@ end
 -- Handler
 -------------------------------------------------------------------------------
 
-function ns.CCListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, destName, _, _)
+function ns.AuraListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, destName, _, _)
     local spellId, spellName, _, auraType = select(12, CombatLogGetCurrentEventInfo())
 
-    ns.DebugPrint(string_format("CCListener: auraType=%s spellId=%s", tostring(auraType), tostring(spellId)))
+    ns.DebugPrint(string_format("AuraListener: auraType=%s spellId=%s", tostring(auraType), tostring(spellId)))
 
     if auraType ~= "DEBUFF" then return end
 
     if not CC_TYPE[spellId] then
-        ns.DebugPrint(string_format("CCListener: spellId=%s not in CC_TYPE", tostring(spellId)))
+        ns.DebugPrint(string_format("AuraListener: spellId=%s not in CC_TYPE", tostring(spellId)))
         return
     end
 
     if not ns.playerGUID then
-        ns.DebugPrint("CCListener: playerGUID is nil, skipping")
+        ns.DebugPrint("AuraListener: playerGUID is nil, skipping")
         return
     end
 
@@ -155,7 +155,7 @@ function ns.CCListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, des
     local ccType = CC_TYPE[spellId]
 
     if destGUID == ns.playerGUID then
-        ns.DebugPrint(string_format("CCListener: CC on player - spellId=%s type=%s", tostring(spellId), tostring(ccType)))
+        ns.DebugPrint(string_format("AuraListener: CC on player - spellId=%s type=%s", tostring(spellId), tostring(ccType)))
         local categoryConfig = db.profile.ccOnYou
         if categoryConfig[ccType] ~= false then
             local typeLabel = CC_TYPE_LABEL[ccType] or ""
@@ -173,7 +173,7 @@ function ns.CCListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, des
     end
 
     if sourceGUID == ns.playerGUID then
-        ns.DebugPrint(string_format("CCListener: CC applied by player - spellId=%s target=%s", tostring(spellId), tostring(destName)))
+        ns.DebugPrint(string_format("AuraListener: CC applied by player - spellId=%s target=%s", tostring(spellId), tostring(destName)))
         ns.Announcer.Announce("ccApplied", spellId, {
             spell = spellName,
             target = destName,

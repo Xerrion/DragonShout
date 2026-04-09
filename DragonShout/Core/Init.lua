@@ -41,7 +41,7 @@ ns.MinimapIcon = {}
 ns.Lifecycle = {}
 ns.CombatLogListener = {}
 ns.InterruptListener = {}
-ns.CCListener = {}
+ns.AuraListener = {}
 ns.DispelListener = {}
 
 -------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ DragonShoutNS = ns
 local LISTENER_MODULES = {
     "CombatLogListener",
     "InterruptListener",
-    "CCListener",
+    "AuraListener",
     "DispelListener",
 }
 

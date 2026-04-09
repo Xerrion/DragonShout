@@ -23,7 +23,7 @@ local DISPATCH = {
         ns.InterruptListener.OnInterrupt(...)
     end,
     SPELL_AURA_APPLIED = function(...)
-        ns.CCListener.OnAuraApplied(...)
+        ns.AuraListener.OnAuraApplied(...)
     end,
     SPELL_DISPEL = function(...)
         ns.DispelListener.OnDispel(...)
