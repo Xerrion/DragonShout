@@ -28,7 +28,8 @@ function ns.DispelListener.OnDispel(sourceGUID, sourceName, _, _, _, destName, _
         return
     end
     if sourceGUID ~= ns.playerGUID then
-        ns.DebugPrint(string_format("DispelListener: sourceGUID %s != playerGUID %s", tostring(sourceGUID), tostring(ns.playerGUID)))
+        ns.DebugPrint(string_format("DispelListener: sourceGUID %s != playerGUID %s",
+            tostring(sourceGUID), tostring(ns.playerGUID)))
         return
     end
 
@@ -41,5 +42,6 @@ function ns.DispelListener.OnDispel(sourceGUID, sourceName, _, _, _, destName, _
         extraSpell = extraSpellName,
     })
 
-    ns.DebugPrint(string_format("DispelListener: dispel detected spellId=%s target=%s", tostring(spellId), tostring(destName)))
+    ns.DebugPrint(string_format("DispelListener: dispel detected spellId=%s target=%s",
+        tostring(spellId), tostring(destName)))
 end

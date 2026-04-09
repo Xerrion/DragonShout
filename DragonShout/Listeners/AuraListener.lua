@@ -155,7 +155,8 @@ function ns.AuraListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, d
     local ccType = CC_TYPE[spellId]
 
     if destGUID == ns.playerGUID then
-        ns.DebugPrint(string_format("AuraListener: CC on player - spellId=%s type=%s", tostring(spellId), tostring(ccType)))
+        ns.DebugPrint(string_format("AuraListener: CC on player - spellId=%s type=%s",
+            tostring(spellId), tostring(ccType)))
         local categoryConfig = db.profile.ccOnYou
         if categoryConfig[ccType] ~= false then
             local typeLabel = CC_TYPE_LABEL[ccType] or ""
@@ -173,7 +174,8 @@ function ns.AuraListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, d
     end
 
     if sourceGUID == ns.playerGUID then
-        ns.DebugPrint(string_format("AuraListener: CC applied by player - spellId=%s target=%s", tostring(spellId), tostring(destName)))
+        ns.DebugPrint(string_format("AuraListener: CC applied by player - spellId=%s target=%s",
+            tostring(spellId), tostring(destName)))
         ns.Announcer.Announce("ccApplied", spellId, {
             spell = spellName,
             target = destName,

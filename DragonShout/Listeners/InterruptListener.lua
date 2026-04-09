@@ -44,7 +44,8 @@ function ns.InterruptListener.OnInterrupt(sourceGUID, sourceName, _, _, _, destN
         return
     end
     if sourceGUID ~= ns.playerGUID then
-        ns.DebugPrint(string_format("InterruptListener: sourceGUID %s != playerGUID %s", tostring(sourceGUID), tostring(ns.playerGUID)))
+        ns.DebugPrint(string_format("InterruptListener: sourceGUID %s != playerGUID %s",
+            tostring(sourceGUID), tostring(ns.playerGUID)))
         return
     end
 
@@ -58,5 +59,6 @@ function ns.InterruptListener.OnInterrupt(sourceGUID, sourceName, _, _, _, destN
         extraSpell = extraSpellName,
     })
 
-    ns.DebugPrint(string_format("InterruptListener: interrupt detected spellId=%s target=%s", tostring(spellId), tostring(destName)))
+    ns.DebugPrint(string_format("InterruptListener: interrupt detected spellId=%s target=%s",
+        tostring(spellId), tostring(destName)))
 end
