@@ -1,4 +1,17 @@
-# DragonShout
+<div align="center">
+
+![Dragon Shout Logo](https://raw.githubusercontent.com/Xerrion/DragonShout/refs/heads/master/assets/DragonShout_logo-400x400.png)
+
+# Dragon Shout
+
+*Shout your interrupts, CC, and dispels in chat - so your group always knows.*
+
+[![Latest Release](https://img.shields.io/github/v/release/Xerrion/DragonShout?style=for-the-badge)](https://github.com/Xerrion/DragonShout/releases/latest)
+[![License](https://img.shields.io/github/license/Xerrion/DragonShout?style=for-the-badge)](LICENSE)
+[![WoW Versions](https://img.shields.io/badge/WoW-Retail%20%7C%20MoP%20Classic%20%7C%20TBC%20Anniversary-blue?style=for-the-badge&logo=battledotnet)](https://worldofwarcraft.blizzard.com/)
+[![Lint](https://img.shields.io/github/actions/workflow/status/Xerrion/DragonShout/lint.yml?style=for-the-badge&label=luacheck)](https://github.com/Xerrion/DragonShout/actions)
+
+</div>
 
 A highly customizable combat announcer addon for World of Warcraft. DragonShout sends chat messages when you interrupt, get CC'd, apply CC to enemies, or dispel.
 
