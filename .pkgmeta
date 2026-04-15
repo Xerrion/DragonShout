@@ -1,5 +1,6 @@
 package-as: DragonShout
 enable-toc-creation: yes
+manual-changelog: .release/CHANGELOG.md
 
 move-folders:
   DragonShout/DragonShout: DragonShout
@@ -15,6 +16,9 @@ ignore:
   - ".git*"
   - .luacheckrc
   - .luarc.json
+  - .types.lua
+  - .release
   - "*.md"
+  - "*.png"
   - release-please-config.json
   - .release-please-manifest.json
