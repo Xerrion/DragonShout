@@ -46,6 +46,8 @@ Install via CurseForge, Wago, or manually place the `DragonShout` and `DragonSho
 - `/ds status` - Show current settings
 - `/ds help` - Show help
 
-## License
+## 📄 License
 
-MIT
+This project is licensed under the **MIT License**. See the [LICENSE](https://github.com/Xerrion/DragonShout/blob/master/LICENSE) file for details.
+
+Made with ❤️ by [Xerrion](https://github.com/Xerrion)
