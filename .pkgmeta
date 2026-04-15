@@ -10,7 +10,7 @@ externals:
   DragonShout/Libs/Ace3: https://repos.wowace.com/wow/ace3/trunk
   DragonShout/Libs/LibDataBroker-1.1: https://github.com/tekkub/libdatabroker-1-1
   DragonShout/Libs/LibDBIcon-1.0: https://repos.wowace.com/wow/libdbicon-1-0/trunk/LibDBIcon-1.0
-  DragonShout/DragonShout_Options/Libs/DragonWidgets: https://github.com/Xerrion/DragonWidgets
+  DragonShout_Options/Libs/DragonWidgets: https://github.com/Xerrion/DragonWidgets
 
 ignore:
   - ".git*"
