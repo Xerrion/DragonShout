@@ -156,33 +156,40 @@ function ns.Announcer.AnnounceCustom(spellId, tokens)
     local now = GetTime()
     local throttleDuration = db.profile.throttleDuration or 3.0
 
-    for _, entry in ipairs(customSpells) do
+    for i, entry in ipairs(customSpells) do
         if tonumber(entry.spellId) == spellId then
-            local throttleKey = tostring(spellId) .. "_custom"
-            local lastTime = lastAnnounceTimes[throttleKey] or 0
-
-            if (now - lastTime) >= throttleDuration then
-                local channel = entry.channel or "AUTO"
-                if channel == "AUTO" then
-                    local ctx = GetGroupContext()
-                    if ctx == "raid" then
-                        channel = "RAID"
-                    elseif ctx == "group" then
-                        channel = "PARTY"
-                    else
-                        channel = "LOCAL"
-                    end
-                end
-
-                local msg = ApplyTemplate(entry.template or "", tokens)
-                SendMessage(channel, msg)
-                lastAnnounceTimes[throttleKey] = now
-
+            if entry.enabled == false then
                 ns.DebugPrint(string_format(
-                    "AnnounceCustom: spellId=%s -> %s: %s", tostring(spellId), channel, tostring(msg)
+                    "AnnounceCustom: skipped disabled spellId=%s", tostring(spellId)
                 ))
             else
-                ns.DebugPrint(string_format("AnnounceCustom: throttled spellId=%s", tostring(spellId)))
+                local throttleKey = tostring(spellId) .. "_custom_" .. tostring(i)
+                local lastTime = lastAnnounceTimes[throttleKey] or 0
+
+                if (now - lastTime) >= throttleDuration then
+                    local ctx = GetGroupContext()
+                    local channel
+                    if ctx == "raid" then
+                        channel = entry.channelRaid or entry.channel or "RAID"
+                    elseif ctx == "group" then
+                        channel = entry.channelGroup or entry.channel or "PARTY"
+                    else
+                        channel = entry.channelSolo or entry.channel or "LOCAL"
+                    end
+
+                    local msg = ApplyTemplate(entry.template or "", tokens)
+                    SendMessage(channel, msg)
+                    lastAnnounceTimes[throttleKey] = now
+
+                    ns.DebugPrint(string_format(
+                        "AnnounceCustom: spellId=%s -> %s: %s",
+                        tostring(spellId), channel, tostring(msg)
+                    ))
+                else
+                    ns.DebugPrint(string_format(
+                        "AnnounceCustom: throttled spellId=%s", tostring(spellId)
+                    ))
+                end
             end
         end
     end

@@ -87,6 +87,7 @@ files["DragonShout_Options/"] = {
         "SOUNDKIT", "ShowUIPanel",
         "StaticPopup_Show",
         "_G",
+        "GetSpellTexture", "GetSpellInfo", "C_Spell",
 
         -- WoW Globals
         "UISpecialFrames",

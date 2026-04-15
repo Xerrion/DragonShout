@@ -129,8 +129,20 @@ local function MigrateProfile(db)
                 cfg.channel = nil
             end
         end
-        version = 3 -- luacheck: ignore 311/version (future migrations will read this)
+        version = 3
         profile.schemaVersion = 3
+    end
+
+    if version < 4 then
+        if profile.customSpells then
+            for _, entry in ipairs(profile.customSpells) do
+                if entry.enabled == nil then
+                    entry.enabled = true
+                end
+            end
+        end
+        version = 4 -- luacheck: ignore 311/version (future migrations will read this)
+        profile.schemaVersion = 4
     end
 end
 
