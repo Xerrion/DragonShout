@@ -7,6 +7,8 @@
 ## Version: @project-version@
 ## SavedVariables: DragonShoutDB
 ## X-License: MIT
+## X-Curse-Project-ID: 1514700
+## X-Wago-ID: QN53gpKB
 ## IconTexture: Interface\AddOns\DragonShout\DragonShout_Icon
 
 # Libraries
