@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.2.0](https://github.com/Xerrion/DragonShout/compare/1.1.0...1.2.0) (2026-04-15)
+
+
+### 🚀 Features
+
+* custom spell list UI with inline per-spell editing ([#8](https://github.com/Xerrion/DragonShout/issues/8)) ([#9](https://github.com/Xerrion/DragonShout/issues/9)) ([c89b53d](https://github.com/Xerrion/DragonShout/commit/c89b53d61c3b57b49af9cf51f791a780f156df17))
+
+
+### 🐛 Bug Fixes
+
+* correct DragonWidgets external path in .pkgmeta ([#10](https://github.com/Xerrion/DragonShout/issues/10)) ([cdc77cb](https://github.com/Xerrion/DragonShout/commit/cdc77cb80cb13cba665088ab54a3d9fcf7c8d472))
+
+
+### ⚙️ Miscellaneous Tasks
+
+* add manual-changelog and .release dir to pkgmeta ([737f677](https://github.com/Xerrion/DragonShout/commit/737f677ae4718f3a2c33b81c556271a7b147c40a))
+
 ## [1.1.0](https://github.com/Xerrion/DragonShout/compare/1.0.0...1.1.0) (2026-04-15)
 
 
