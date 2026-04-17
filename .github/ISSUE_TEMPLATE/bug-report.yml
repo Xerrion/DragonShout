@@ -3,6 +3,8 @@ description: Report a bug with DragonShout
 title: "[Bug]: "
 labels:
   - C-Bug
+assignees:
+  - Xerrion
 body:
   - type: textarea
     id: description
