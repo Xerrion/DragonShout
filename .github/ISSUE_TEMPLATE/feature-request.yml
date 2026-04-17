@@ -3,7 +3,8 @@ description: Suggest a new feature or improvement for DragonShout
 title: "[Feature]: "
 labels:
   - C-Feature
-assignees: []
+assignees:
+  - Xerrion
 body:
   - type: textarea
     id: problem-motivation
