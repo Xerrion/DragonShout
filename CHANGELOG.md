@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1](https://github.com/Xerrion/DragonShout/compare/1.2.0...1.2.1) (2026-04-22)
+
+
+### ⚙️ Miscellaneous Tasks
+
+* auto-assign all new issues to Xerrion ([#11](https://github.com/Xerrion/DragonShout/issues/11)) ([efab1a0](https://github.com/Xerrion/DragonShout/commit/efab1a012685042c75dd083c50f683f36baef3a8))
+* update TOC Interface versions ([#14](https://github.com/Xerrion/DragonShout/issues/14)) ([5d9e89d](https://github.com/Xerrion/DragonShout/commit/5d9e89dd541fd5674f4c9cf277329e86f21896f2))
+
 ## [1.2.0](https://github.com/Xerrion/DragonShout/compare/1.1.0...1.2.0) (2026-04-15)
 
 
