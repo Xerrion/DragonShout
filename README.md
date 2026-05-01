@@ -44,6 +44,7 @@ Install via CurseForge, Wago, or manually place the `DragonShout` and `DragonSho
 - `/ds toggle` - Toggle addon on/off
 - `/ds config` - Open settings panel
 - `/ds status` - Show current settings
+- `/ds debug` - Toggle debug mode on/off
 - `/ds help` - Show help
 
 ## 📄 License

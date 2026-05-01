@@ -18,6 +18,7 @@ local string_format = string.format
 local tostring = tostring
 local UnitDebuff = UnitDebuff
 local C_UnitAuras = C_UnitAuras  -- nil on Classic; nil-safe
+local L = ns.L
 
 -------------------------------------------------------------------------------
 -- CC type classification
@@ -90,12 +91,12 @@ local CC_TYPE = {
 -------------------------------------------------------------------------------
 
 local CC_TYPE_LABEL = {
-    silence   = "Silenced",
-    stun      = "Stunned",
-    polymorph = "Polymorphed",
-    disorient = "Disoriented",
-    fear      = "Feared",
-    root      = "Rooted",
+    silence   = L["Silenced"],
+    stun      = L["Stunned"],
+    polymorph = L["Polymorphed"],
+    disorient = L["Disoriented"],
+    fear      = L["Feared"],
+    root      = L["Rooted"],
 }
 
 -------------------------------------------------------------------------------
@@ -131,6 +132,8 @@ end
 -------------------------------------------------------------------------------
 -- Handler
 -------------------------------------------------------------------------------
+
+ns.AuraListener = {}
 
 function ns.AuraListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, destName, _, _)
     local spellId, spellName, _, auraType = select(12, CombatLogGetCurrentEventInfo())

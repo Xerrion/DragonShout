@@ -61,7 +61,6 @@ L["Toggle on/off"] = true
 
 -- Default template strings (used as config defaults and locale keys)
 L["Interrupted {target}'s {extraSpell} with {spell}!"] = true
-L["I am {spell} ({type}) for {duration}s!"] = true
 L["CC'd {target} with {spell}!"] = true
 L["Dispelled {extraSpell} from {target}!"] = true
 
@@ -88,7 +87,6 @@ L["Enable Debug Mode"] = true
 L["Enable interrupt announcements"] = true
 L["Chat channel to send announcements to"] = true
 L["Announcement template. Tokens: {spell}, {target}, {extraSpell}"] = true
-L["Auto"] = true
 L["Party"] = true
 L["Raid"] = true
 L["Say"] = true
@@ -148,21 +146,15 @@ L["Add spell IDs to announce when applied to or by you."] = true
 L["Template tokens: {spell} (spell name), {target} (target unit), {source} (caster)"] = true
 L["Spell ID"] = true
 L["Add"] = true
-L["Remove"] = true
 L["No custom spells configured."] = true
-L["Spell ID or Name"] = true
 L["Enable this spell announcement"] = true
 L["Unknown Spell"] = true
-L["Click to edit"] = true
-L["Collapse"] = true
 L["Solo: "] = true
 L["Group: "] = true
 L["Raid: "] = true
 L["Channel used when solo (not in any group)"] = true
 L["Channel used when in a party or group"] = true
 L["Channel used when in a raid or instance"] = true
-L["Custom spell template"] = true
-L["Custom spell channel"] = true
 
 -- DragonShout_Options/Tabs/ProfilesTab.lua
 L["Active Profile"] = true

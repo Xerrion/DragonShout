@@ -3,6 +3,7 @@ max_line_length = 120
 codes = true
 exclude_files = {
     "DragonShout/Libs/",
+    "DragonShout_Options/Libs/",
     ".release/",
 }
 
