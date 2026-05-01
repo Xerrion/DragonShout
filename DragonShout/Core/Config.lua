@@ -11,6 +11,15 @@ local ADDON_NAME, ns = ...
 -- Database Defaults
 -------------------------------------------------------------------------------
 
+local TYPE_TEMPLATE_DEFAULTS = {
+    silence   = "Silenced for {duration}s!",
+    polymorph = "Polymorphed for {duration}s!",
+    stun      = "Stunned for {duration}s!",
+    disorient = "Disoriented for {duration}s!",
+    fear      = "Feared for {duration}s!",
+    root      = "Rooted for {duration}s!",
+}
+
 local defaults = {
     profile = {
         enabled = true,
@@ -35,14 +44,7 @@ local defaults = {
             channelGroup = "PARTY",
             channelRaid = "RAID",
             template = "{type} for {duration}s!",
-            typeTemplates = {
-                silence   = "Silenced for {duration}s!",
-                polymorph = "Polymorphed for {duration}s!",
-                stun      = "Stunned for {duration}s!",
-                disorient = "Disoriented for {duration}s!",
-                fear      = "Feared for {duration}s!",
-                root      = "Rooted for {duration}s!",
-            },
+            typeTemplates = TYPE_TEMPLATE_DEFAULTS,
             silence = true,
             polymorph = true,
             stun = true,
@@ -69,19 +71,6 @@ local defaults = {
 
         customSpells = {},
     },
-}
-
--------------------------------------------------------------------------------
--- Migration helpers
--------------------------------------------------------------------------------
-
-local TYPE_TEMPLATE_DEFAULTS = {
-    silence   = "Silenced for {duration}s!",
-    polymorph = "Polymorphed for {duration}s!",
-    stun      = "Stunned for {duration}s!",
-    disorient = "Disoriented for {duration}s!",
-    fear      = "Feared for {duration}s!",
-    root      = "Rooted for {duration}s!",
 }
 
 -------------------------------------------------------------------------------

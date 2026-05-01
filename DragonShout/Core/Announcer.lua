@@ -12,6 +12,7 @@ local ADDON_NAME, ns = ...
 -------------------------------------------------------------------------------
 
 local tostring = tostring
+local pcall = pcall
 local GetTime = GetTime
 local IsInGroup = IsInGroup
 local IsInRaid = IsInRaid
@@ -86,7 +87,10 @@ local function SendMessage(channel, msg)
         ns.Print(msg)
         return
     end
-    SendChatMessage(msg, channel)
+    local success, err = pcall(SendChatMessage, msg, channel)
+    if not success then
+        ns.DebugPrint(string_format("SendChatMessage failed for channel '%s': %s", tostring(channel), tostring(err)))
+    end
 end
 
 -------------------------------------------------------------------------------

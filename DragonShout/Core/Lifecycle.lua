@@ -22,6 +22,8 @@ local WOW_PROJECT_MAINLINE = WOW_PROJECT_MAINLINE
 ns.playerGUID = nil
 ns.IS_RETAIL = (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE)
 
+local playerLoginRegistered = false
+
 -------------------------------------------------------------------------------
 -- Lifecycle Module
 -------------------------------------------------------------------------------
@@ -38,11 +40,16 @@ function ns.Lifecycle.Initialize(addon)
             ns.playerGUID = UnitGUID("player")
             ns.DebugPrint("Player GUID cached on PLAYER_LOGIN: " .. tostring(ns.playerGUID))
             addon:UnregisterEvent("PLAYER_LOGIN")
+            playerLoginRegistered = false
         end)
+        playerLoginRegistered = true
     end
 end
 
 function ns.Lifecycle.Shutdown()
     ns.playerGUID = nil
-    ns.Addon:UnregisterEvent("PLAYER_LOGIN")
+    if playerLoginRegistered then
+        ns.Addon:UnregisterEvent("PLAYER_LOGIN")
+        playerLoginRegistered = false
+    end
 end

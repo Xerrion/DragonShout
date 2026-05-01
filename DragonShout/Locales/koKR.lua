@@ -72,7 +72,6 @@ L["Simulate a CC announcement"] = ""
 L["Enable interrupt announcements"] = ""
 L["Chat channel to send announcements to"] = ""
 L["Announcement template. Tokens: {spell}, {target}, {extraSpell}"] = ""
-L["Auto"] = ""
 L["Party"] = ""
 L["Raid"] = ""
 L["Say"] = ""
@@ -94,6 +93,12 @@ L["Announce when stunned"] = ""
 L["Announce when disoriented"] = ""
 L["Announce when feared"] = ""
 L["Announce when rooted"] = ""
+L["Silenced"] = true
+L["Stunned"] = true
+L["Polymorphed"] = true
+L["Disoriented"] = true
+L["Feared"] = true
+L["Rooted"] = true
 
 -- DragonShout_Options/Tabs/CCAppliedTab.lua
 L["Enable CC-applied announcements"] = ""
@@ -109,8 +114,6 @@ L["Add spell IDs to announce when applied to or by you."] = ""
 L["Spell ID"] = ""
 L["Add"] = ""
 L["Remove Last"] = ""
-L["Custom spell template"] = ""
-L["Custom spell channel"] = ""
 
 -- DragonShout_Options/Tabs/ProfilesTab.lua
 L["Active Profile"] = ""

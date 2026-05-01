@@ -32,19 +32,6 @@ ns._debugMode = false
 ns.L = LibStub("AceLocale-3.0"):GetLocale(ADDON_NAME)
 local L = ns.L
 
--------------------------------------------------------------------------------
--- Namespace sub-tables (populated by other files)
--------------------------------------------------------------------------------
-
-ns.Announcer = {}
-ns.MinimapIcon = {}
-ns.Lifecycle = {}
-ns.CombatLogListener = {}
-ns.InterruptListener = {}
-ns.AuraListener = {}
-ns.DispelListener = {}
-
--------------------------------------------------------------------------------
 -- AceAddon Setup
 -------------------------------------------------------------------------------
 

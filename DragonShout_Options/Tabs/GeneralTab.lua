@@ -43,11 +43,8 @@ local function CreateCoreSection(parent, yOffset)
         tooltip = L["Enable or disable the addon"],
         get = function() return db.profile.enabled end,
         set = function(value)
-            db.profile.enabled = value
-            if value then
-                dsns.Addon:Enable()
-            else
-                dsns.Addon:Disable()
+            if db.profile.enabled ~= value then
+                dsns.ToggleAddonEnabled()
             end
         end,
     })
