@@ -133,6 +133,8 @@ end
 -- Handler
 -------------------------------------------------------------------------------
 
+ns.AuraListener = {}
+
 function ns.AuraListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, destName, _, _)
     local spellId, spellName, _, auraType = select(12, CombatLogGetCurrentEventInfo())
 
