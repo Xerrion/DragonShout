@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/Xerrion/DragonShout/compare/1.2.1...1.2.2) (2026-05-01)
+
+
+### ⚙️ Miscellaneous Tasks
+
+* code-quality cleanup batch ([#17](https://github.com/Xerrion/DragonShout/issues/17)) ([#20](https://github.com/Xerrion/DragonShout/issues/20)) ([562a8c4](https://github.com/Xerrion/DragonShout/commit/562a8c451b59d68e182e5d64ad8d1d28e070b921))
+
 ## [1.2.1](https://github.com/Xerrion/DragonShout/compare/1.2.0...1.2.1) (2026-04-22)
 
 
