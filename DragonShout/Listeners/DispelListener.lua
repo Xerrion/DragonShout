@@ -1,18 +1,16 @@
 -------------------------------------------------------------------------------
 -- DispelListener.lua
--- Handles SPELL_DISPEL sub-events from the combat log
+-- Handles dispel events (player as the dispeller)
 --
 -- Supported versions: Retail, MoP Classic, TBC Anniversary
 -------------------------------------------------------------------------------
 
-local ADDON_NAME, ns = ...
+local ADDON_NAME, ns = ... -- luacheck: ignore 211/ADDON_NAME
 
 -------------------------------------------------------------------------------
 -- Cached WoW API
 -------------------------------------------------------------------------------
 
-local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
-local select = select
 local string_format = string.format
 local tostring = tostring
 
@@ -22,26 +20,27 @@ local tostring = tostring
 
 ns.DispelListener = {}
 
-function ns.DispelListener.OnDispel(sourceGUID, sourceName, _, _, _, destName, _, _)
+-- payload = { sourceGUID, sourceName, destGUID, destName,
+--             spellId, spellName,             -- the dispel spell
+--             extraSpellId, extraSpellName }  -- the removed aura (may be nil on retail 12.0+ cache miss)
+function ns.DispelListener.OnDispel(payload)
     if not ns.playerGUID then
         ns.DebugPrint("DispelListener: playerGUID is nil, skipping")
         return
     end
-    if sourceGUID ~= ns.playerGUID then
+    if payload.sourceGUID ~= ns.playerGUID then
         ns.DebugPrint(string_format("DispelListener: sourceGUID %s != playerGUID %s",
-            tostring(sourceGUID), tostring(ns.playerGUID)))
+            tostring(payload.sourceGUID), tostring(ns.playerGUID)))
         return
     end
 
-    local spellId, spellName, _, _, extraSpellName = select(12, CombatLogGetCurrentEventInfo())
-
-    ns.Announcer.Announce("dispels", spellId, {
-        spell = spellName,
-        target = destName,
-        source = sourceName,
-        extraSpell = extraSpellName,
+    ns.Announcer.Announce("dispels", payload.spellId, {
+        spell = payload.spellName,
+        target = payload.destName,
+        source = payload.sourceName,
+        extraSpell = payload.extraSpellName,
     })
 
     ns.DebugPrint(string_format("DispelListener: dispel detected spellId=%s target=%s",
-        tostring(spellId), tostring(destName)))
+        tostring(payload.spellId), tostring(payload.destName)))
 end

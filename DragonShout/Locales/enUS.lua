@@ -51,6 +51,10 @@ L["Player GUID"] = true
 L["Version"] = true
 L["Toggle debug mode on/off"] = true
 L["Debug mode: "] = true
+L["Combat-log listener"] = true
+L["Unit-event listener"] = true
+L["active"] = true
+L["inactive"] = true
 
 -- DragonShout/Core/MinimapIcon.lua
 L["Status: "] = true
@@ -61,6 +65,7 @@ L["Toggle on/off"] = true
 
 -- Default template strings (used as config defaults and locale keys)
 L["Interrupted {target}'s {extraSpell} with {spell}!"] = true
+L["Interrupted {target}'s {extraSpell}!"] = true
 L["CC'd {target} with {spell}!"] = true
 L["Dispelled {extraSpell} from {target}!"] = true
 

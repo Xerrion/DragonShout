@@ -52,13 +52,15 @@ files["DragonShout/"] = {
     read_globals = {
         -- WoW API
         "IsInGroup", "IsInRaid", "IsInInstance",
-        "UnitGUID", "UnitDebuff", "C_UnitAuras",
+        "UnitGUID", "UnitName", "UnitDebuff", "UnitExists", "UnitIsFriend",
+        "C_UnitAuras",
         "CombatLogGetCurrentEventInfo",
         "SendChatMessage", "C_ChatInfo",
         "InCombatLockdown", "IsShiftKeyDown",
         "InterfaceOptionsFrame_OpenToCategory", "Settings",
         "hooksecurefunc",
         "GetSpellInfo", "C_Spell",
+        "GetBuildInfo",
 
         -- WoW Globals
         "WOW_PROJECT_ID", "WOW_PROJECT_MAINLINE",

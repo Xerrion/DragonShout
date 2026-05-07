@@ -11,9 +11,7 @@ local ADDON_NAME, ns = ...
 -- Cached WoW API
 -------------------------------------------------------------------------------
 
-local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local math_floor = math.floor
-local select = select
 local string_format = string.format
 local tostring = tostring
 local UnitDebuff = UnitDebuff
@@ -130,15 +128,64 @@ local function GetPlayerCCDuration(spellId)
 end
 
 -------------------------------------------------------------------------------
--- Handler
+-- Module
 -------------------------------------------------------------------------------
 
 ns.AuraListener = {}
 
-function ns.AuraListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, destName, _, _)
-    local spellId, spellName, _, auraType = select(12, CombatLogGetCurrentEventInfo())
+-------------------------------------------------------------------------------
+-- Aura snapshot cache
+--
+-- Owned by AuraListener; only UnitEventListener writes/reads (no-op on CLEU
+-- path because auraInstanceID is nil there). Key: unitToken .. ":" .. instId.
+-- Value: snapshot table { spellId, spellName, auraType, sourceGUID,
+--                         sourceName, unitToken, unitGUID, insertedAt }.
+-------------------------------------------------------------------------------
 
-    ns.DebugPrint(string_format("AuraListener: auraType=%s spellId=%s", tostring(auraType), tostring(spellId)))
+local _auraCache = {}
+
+local function CacheKey(unitToken, auraInstanceID)
+    return unitToken .. ":" .. tostring(auraInstanceID)
+end
+
+function ns.AuraListener.RememberAura(unitToken, auraInstanceID, snapshot)
+    if not unitToken or not auraInstanceID or not snapshot then return end
+    _auraCache[CacheKey(unitToken, auraInstanceID)] = snapshot
+end
+
+function ns.AuraListener.ForgetAura(unitToken, auraInstanceID)
+    if not unitToken or not auraInstanceID then return end
+    _auraCache[CacheKey(unitToken, auraInstanceID)] = nil
+end
+
+function ns.AuraListener.LookupAuraSnapshot(unitToken, auraInstanceID)
+    if not unitToken or not auraInstanceID then return nil end
+    return _auraCache[CacheKey(unitToken, auraInstanceID)]
+end
+
+function ns.AuraListener.ClearUnitAuras(unitToken)
+    if not unitToken then return end
+    local prefix = unitToken .. ":"
+    local prefixLen = #prefix
+    for key in pairs(_auraCache) do
+        if key:sub(1, prefixLen) == prefix then
+            _auraCache[key] = nil
+        end
+    end
+end
+
+-------------------------------------------------------------------------------
+-- Handler
+-------------------------------------------------------------------------------
+
+-- payload = { sourceGUID, sourceName, destGUID, destName,
+--             spellId, spellName, auraType, auraInstanceID }
+function ns.AuraListener.OnAuraApplied(payload)
+    local spellId = payload.spellId
+    local auraType = payload.auraType
+
+    ns.DebugPrint(string_format("AuraListener: auraType=%s spellId=%s",
+        tostring(auraType), tostring(spellId)))
 
     if auraType ~= "DEBUFF" then return end
 
@@ -156,6 +203,11 @@ function ns.AuraListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, d
     if not db then return end
 
     local ccType = CC_TYPE[spellId]
+    local destGUID = payload.destGUID
+    local sourceGUID = payload.sourceGUID
+    local sourceName = payload.sourceName
+    local destName = payload.destName
+    local spellName = payload.spellName
 
     if destGUID == ns.playerGUID then
         ns.DebugPrint(string_format("AuraListener: CC on player - spellId=%s type=%s",

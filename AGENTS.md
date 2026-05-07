@@ -67,6 +67,8 @@ DragonShout/                    (repo root)
 | ccApplied   | AuraListener            | SPELL_AURA_APPLIED      | Player applies CC to enemy      |
 | dispels     | DispelListener        | SPELL_DISPEL            | Player dispels an aura          |
 
+On retail 12.0+ the source events are unit events (`UNIT_SPELLCAST_INTERRUPTED`, `UNIT_AURA`, `UNIT_SPELLCAST_SUCCEEDED`) registered by `UnitEventListener`. The listener column itself is unchanged; both source modules feed the same `OnInterrupt` / `OnAuraApplied` / `OnDispel` payload contract.
+
 ### CLEU Event Handling Pattern
 
 1. `CombatLogListener` registers `COMBAT_LOG_EVENT_UNFILTERED`
@@ -95,6 +97,7 @@ DragonShout/                    (repo root)
 3. `SPELL_AURA_REFRESH` does NOT have an amount field at idx 16
 4. `CC_TYPE[spellId] ~= nil` is the guard for CC detection in AuraListener - no separate IS_CC_SPELL table exists
 5. `C_ChatInfo.SendChatMessage` is Retail 11.2+ only - fallback to `SendChatMessage`
+6. Retail 12.0 (Midnight) marks `COMBAT_LOG_EVENT_UNFILTERED` with `HasRestrictions = true`, causing `ADDON_ACTION_FORBIDDEN` on insecure registration. `ns.capabilities.combatLog` (set in `Lifecycle.Initialize`) selects the event source: when true, `CombatLogListener` registers CLEU; when false, `UnitEventListener` registers `UNIT_SPELLCAST_INTERRUPTED`, `UNIT_AURA`, and `UNIT_SPELLCAST_SUCCEEDED` against tracked unit tokens (player + pet + group). Both source modules feed the same handler payload contract (`OnInterrupt`, `OnAuraApplied`, `OnDispel`).
 
 ## Labels
 

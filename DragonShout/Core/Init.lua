@@ -32,6 +32,7 @@ ns._debugMode = false
 ns.L = LibStub("AceLocale-3.0"):GetLocale(ADDON_NAME)
 local L = ns.L
 
+-------------------------------------------------------------------------------
 -- AceAddon Setup
 -------------------------------------------------------------------------------
 
@@ -83,6 +84,7 @@ DragonShoutNS = ns
 
 local LISTENER_MODULES = {
     "CombatLogListener",
+    "UnitEventListener",
     "InterruptListener",
     "AuraListener",
     "DispelListener",

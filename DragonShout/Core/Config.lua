@@ -35,7 +35,7 @@ local defaults = {
             channelSolo = "LOCAL",
             channelGroup = "PARTY",
             channelRaid = "RAID",
-            template = "Interrupted {target}'s {extraSpell} with {spell}!",
+            template = "Interrupted {target}'s {extraSpell}!",
         },
 
         ccOnYou = {

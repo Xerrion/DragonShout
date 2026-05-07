@@ -38,6 +38,7 @@ Core\MinimapIcon.lua
 
 # Listeners
 Listeners\CombatLogListener.lua
+Listeners\UnitEventListener.lua
 Listeners\InterruptListener.lua
 Listeners\AuraListener.lua
 Listeners\DispelListener.lua

@@ -46,6 +46,17 @@ local function PrintStatus()
     print("  " .. L["Minimap Icon"] .. ": " .. YesNo(not db.minimap.hide))
     print("  " .. L["Player GUID"] .. ": " .. ns.COLOR_WHITE .. tostring(ns.playerGUID) .. ns.COLOR_RESET)
     print("  " .. L["Version"] .. ": " .. ns.COLOR_WHITE .. (ns.IS_RETAIL and "Retail" or "Classic") .. ns.COLOR_RESET)
+
+    local cleuActive = ns.CombatLogListener and ns.CombatLogListener.IsActive and ns.CombatLogListener.IsActive()
+    local cleuColor = cleuActive and ns.COLOR_GREEN or ns.COLOR_GRAY
+    local cleuLabel = cleuActive and L["active"] or L["inactive"]
+    print("  " .. L["Combat-log listener"] .. ": " .. cleuColor .. cleuLabel .. ns.COLOR_RESET)
+
+    local unitActive = ns.UnitEventListener and ns.UnitEventListener.IsActive and ns.UnitEventListener.IsActive()
+    local unitColor = unitActive and ns.COLOR_GREEN or ns.COLOR_GRAY
+    local unitLabel = unitActive and L["active"] or L["inactive"]
+    print("  " .. L["Unit-event listener"] .. ": " .. unitColor .. unitLabel .. ns.COLOR_RESET)
+
     print("  " .. L["Debug Mode"] .. ": " .. YesNo(ns._debugMode or db.debug))
     print("")
     PrintCategory(L["Interrupts"], db.interrupts)
