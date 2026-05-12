@@ -11,6 +11,7 @@ local ADDON_NAME, ns = ...
 -- Cached WoW API
 -------------------------------------------------------------------------------
 
+local CreateFrame = CreateFrame
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local string_format = string.format
 
@@ -50,12 +51,33 @@ local function OnCombatLogEvent()
             destGUID, destName, destFlags, destRaidFlags)
 end
 
-function ns.CombatLogListener.Initialize(addon)
-    addon:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", OnCombatLogEvent)
+-------------------------------------------------------------------------------
+-- Private event frame
+--
+-- Retail 12.0 (Midnight) marks COMBAT_LOG_EVENT_UNFILTERED with
+-- HasRestrictions = true, which makes AceEvent's shared dispatcher emit
+-- ADDON_ACTION_FORBIDDEN. Owning a private, unnamed frame keeps the CLEU
+-- registration off the shared global event bus and contains the blast radius.
+-- The frame MUST be unnamed - a named frame would re-introduce the same
+-- shared-global exposure we are escaping.
+-------------------------------------------------------------------------------
+
+local frame = CreateFrame("Frame")
+frame:SetScript("OnEvent", OnCombatLogEvent)
+
+function ns.CombatLogListener.Initialize(_addon)
+    if ns.capabilities and ns.capabilities.cleuRestricted then
+        ns.DebugPrint("CombatLogListener: CLEU restricted on this client; standing down")
+        return
+    end
+    frame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     ns.DebugPrint("CombatLogListener initialized")
 end
 
 function ns.CombatLogListener.Shutdown()
-    ns.Addon:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    if ns.capabilities and ns.capabilities.cleuRestricted then
+        return
+    end
+    frame:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     ns.DebugPrint("CombatLogListener shut down")
 end

@@ -83,6 +83,7 @@ DragonShoutNS = ns
 
 local LISTENER_MODULES = {
     "CombatLogListener",
+    "UnitEventListener",
     "InterruptListener",
     "AuraListener",
     "DispelListener",

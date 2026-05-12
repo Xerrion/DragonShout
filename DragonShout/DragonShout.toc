@@ -29,6 +29,7 @@ Locales\zhTW.lua
 
 # Core
 Core\Init.lua
+Core\Capabilities.lua
 Core\Config.lua
 Core\Lifecycle.lua
 Core\ConfigWindow.lua
@@ -38,6 +39,7 @@ Core\MinimapIcon.lua
 
 # Listeners
 Listeners\CombatLogListener.lua
+Listeners\UnitEventListener.lua
 Listeners\InterruptListener.lua
 Listeners\AuraListener.lua
 Listeners\DispelListener.lua
