@@ -66,11 +66,18 @@ local frame = CreateFrame("Frame")
 frame:SetScript("OnEvent", OnCombatLogEvent)
 
 function ns.CombatLogListener.Initialize(_addon)
+    if ns.capabilities and ns.capabilities.cleuRestricted then
+        ns.DebugPrint("CombatLogListener: CLEU restricted on this client; standing down")
+        return
+    end
     frame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     ns.DebugPrint("CombatLogListener initialized")
 end
 
 function ns.CombatLogListener.Shutdown()
+    if ns.capabilities and ns.capabilities.cleuRestricted then
+        return
+    end
     frame:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     ns.DebugPrint("CombatLogListener shut down")
 end

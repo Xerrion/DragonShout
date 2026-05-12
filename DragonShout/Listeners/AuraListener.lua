@@ -135,8 +135,25 @@ end
 
 ns.AuraListener = {}
 
-function ns.AuraListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, destName, _, _)
-    local spellId, spellName, _, auraType = select(12, CombatLogGetCurrentEventInfo())
+-- Exposed so UnitEventListener (retail Midnight UNIT_AURA path) can filter
+-- updateInfo.addedAuras to CC spells before paying the cost of a full
+-- OnAuraApplied call. The handler still re-checks membership; this is a
+-- pre-filter, not a load-bearing gate.
+ns.AuraListener.CC_TYPE = CC_TYPE
+
+function ns.AuraListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, destName, _, _, extras)
+    -- `extras` is the post-PR-#28 minimal signature extension: when present
+    -- (UnitEventListener on retail Midnight) spell info travels through it.
+    -- When nil (CombatLogListener on Classic), fall back to CLEU positional
+    -- arguments at index 12+.
+    local spellId, spellName, auraType
+    if extras then
+        spellId = extras.spellId
+        spellName = extras.spellName
+        auraType = extras.auraType
+    else
+        spellId, spellName, _, auraType = select(12, CombatLogGetCurrentEventInfo())
+    end
 
     ns.DebugPrint(string_format("AuraListener: auraType=%s spellId=%s", tostring(auraType), tostring(spellId)))
 
