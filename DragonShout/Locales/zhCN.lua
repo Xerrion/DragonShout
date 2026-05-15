@@ -61,7 +61,7 @@ L["Toggle on/off"] = "切换启用/禁用"
 
 -- 默认模板字符串（用作配置默认值和本地化键）
 L["Interrupted {target}'s {extraSpell} with {spell}!"] = "{spell} 打断了 {target} 的 {extraSpell}！"
-L["I am {spell} ({type}) for {duration}s!"] = "我被 {spell} ({type}) {duration}秒！"
+L["{type} for {duration}s!"] = "{type} 持续 {duration}秒！"
 L["CC'd {target} with {spell}!"] = "{spell} 控制了 {target}！"
 L["Dispelled {extraSpell} from {target}!"] = "驱散了 {target} 的 {extraSpell}！"
 
@@ -121,7 +121,7 @@ L["Announce when rooted"] = "被定身时发送通告"
 L["Silenced"] = "沉默"
 L["Stunned"] = "晕眩"
 L["Polymorphed"] = "变形"
-L["Disoriented"] = "迷迷惑"
+L["Disoriented"] = "迷惑"
 L["Feared"] = "恐惧"
 L["Rooted"] = "定身"
 L["Per-Type Templates"] = "各类型模板"
@@ -144,7 +144,7 @@ L["Announcement template. Tokens: {spell}, {target}, {extraSpell}"] = "通告模
 -- DragonShout_Options/Tabs/CustomSpellsTab.lua
 L["Custom Spells"] = "自定义技能"
 L["Add spell IDs to announce when applied to or by you."] = "添加技能ID，当该技能作用于你或由你释放时发送通告。"
-L["Template tokens: {spell} (spell name), {target} (target unit), {source} (caster)"] = "模板参数：技能名：{spell}，目标：{target}，施法者：{source}"
+L["Template tokens: {spell} (spell name), {target} (target unit), {source} (caster)"] = "模板参数：技能：{spell}，目标：{target}，施法者：{source}"
 L["Spell ID"] = "技能ID"
 L["Add"] = "添加"
 L["No custom spells configured."] = "未配置任何自定义技能。"
