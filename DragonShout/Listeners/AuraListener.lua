@@ -22,69 +22,33 @@ local L = ns.L
 
 -------------------------------------------------------------------------------
 -- CC type classification
+--
+-- Spell ID -> CC type tables live in Data/CC_{Retail,MoP,TBC,Era}.lua and are
+-- loaded into ns.Data before this file. At load, MergeTable copies the
+-- appropriate table into CC_TYPE based on WOW_PROJECT_ID. Unknown project IDs
+-- fall back to ERA_CC as the safest baseline (1.x player abilities only).
+--
+-- WOW_PROJECT_MISTS_CLASSIC may not be defined on older clients; the numeric
+-- fallback `or 14` matches the constant's documented value so the comparison
+-- still works on clients that lack the symbol.
 -------------------------------------------------------------------------------
 
-local CC_TYPE = {
-    -- Polymorph
-    [118]    = "polymorph",
-    [12824]  = "polymorph",
-    [12825]  = "polymorph",
-    [12826]  = "polymorph",
-    [28271]  = "polymorph",
-    [28272]  = "polymorph",
-    [61025]  = "polymorph",
-    [61305]  = "polymorph",
-    [126819] = "polymorph",
-    [161353] = "polymorph",
-    [161354] = "polymorph",
-    [161355] = "polymorph",
-    [161372] = "polymorph",
-    [277787] = "polymorph",
-    [277792] = "polymorph",
-    [51514]  = "polymorph",
+local function MergeTable(target, source)
+    for k, v in pairs(source) do
+        target[k] = v
+    end
+end
 
-    -- Silences
-    [2139]   = "silence",
-    [6552]   = "silence",
-    [47528]  = "silence",
-    [1766]   = "silence",
-    [93985]  = "silence",
-    [47476]  = "silence",
-    [15487]  = "silence",
-    [28730]  = "silence",
-    [25046]  = "silence",
-    [50613]  = "silence",
-    [69179]  = "silence",
-    [80483]  = "silence",
-    [129597] = "silence",
-    [155145] = "silence",
-    [202719] = "silence",
-    [18498]  = "silence",
-
-    -- Stuns
-    [1833]   = "stun",
-    [408]    = "stun",
-    [853]    = "stun",
-    [20252]  = "stun",
-    [20549]  = "stun",
-    [5211]   = "stun",
-    [7922]   = "stun",
-
-    -- Disorient
-    [31661]  = "disorient",
-    [19503]  = "disorient",
-
-    -- Fear
-    [5782]   = "fear",
-    [8122]   = "fear",
-    [10326]  = "fear",
-    [5484]   = "fear",
-
-    -- Root
-    [44572]  = "root",
-    [122]    = "root",
-    [339]    = "root",
-}
+local CC_TYPE = {}
+if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+    MergeTable(CC_TYPE, ns.Data.RETAIL_CC)
+elseif WOW_PROJECT_ID == (WOW_PROJECT_MISTS_CLASSIC or 14) then
+    MergeTable(CC_TYPE, ns.Data.MOP_CC)
+elseif WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
+    MergeTable(CC_TYPE, ns.Data.TBC_CC)
+else
+    MergeTable(CC_TYPE, ns.Data.ERA_CC)
+end
 
 -------------------------------------------------------------------------------
 -- Display labels for CC types (used as {type} token value)
@@ -155,12 +119,14 @@ function ns.AuraListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, d
         spellId, spellName, _, auraType = select(12, CombatLogGetCurrentEventInfo())
     end
 
-    ns.DebugPrint(string_format("AuraListener: auraType=%s spellId=%s", tostring(auraType), tostring(spellId)))
+    ns.DebugPrintCLEU(sourceGUID, destGUID,
+        string_format("AuraListener: auraType=%s spellId=%s", tostring(auraType), tostring(spellId)))
 
     if auraType ~= "DEBUFF" then return end
 
     if not CC_TYPE[spellId] then
-        ns.DebugPrint(string_format("AuraListener: spellId=%s not in CC_TYPE", tostring(spellId)))
+        ns.DebugPrintCLEU(sourceGUID, destGUID,
+            string_format("AuraListener: spellId=%s not in CC_TYPE", tostring(spellId)))
         return
     end
 
@@ -175,7 +141,7 @@ function ns.AuraListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, d
     local ccType = CC_TYPE[spellId]
 
     if destGUID == ns.playerGUID then
-        ns.DebugPrint(string_format("AuraListener: CC on player - spellId=%s type=%s",
+        ns.DebugPrintCLEU(sourceGUID, destGUID, string_format("AuraListener: CC on player - spellId=%s type=%s",
             tostring(spellId), tostring(ccType)))
         local categoryConfig = db.profile.ccOnYou
         if categoryConfig[ccType] ~= false then
@@ -194,8 +160,9 @@ function ns.AuraListener.OnAuraApplied(sourceGUID, sourceName, _, _, destGUID, d
     end
 
     if sourceGUID == ns.playerGUID then
-        ns.DebugPrint(string_format("AuraListener: CC applied by player - spellId=%s target=%s",
-            tostring(spellId), tostring(destName)))
+        ns.DebugPrintCLEU(sourceGUID, destGUID,
+            string_format("AuraListener: CC applied by player - spellId=%s target=%s",
+                tostring(spellId), tostring(destName)))
         ns.Announcer.Announce("ccApplied", spellId, {
             spell = spellName,
             target = destName,

@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
 -- GeneralTab.lua
--- General settings tab: enable, throttle, minimap icon, testing, debug
+-- General settings tab: enable, throttle, minimap icon, testing
 --
 -- Supported versions: Retail, MoP Classic, TBC Anniversary
 -------------------------------------------------------------------------------
@@ -116,49 +116,6 @@ local function CreateTestingSection(parent, yOffset)
     return yOffset
 end
 
-local function CreateDebugSection(parent, yOffset)
-    local db = dsns.Addon.db
-
-    local section = W.CreateSection(parent, L["Debug Settings"])
-    local content = section.content
-    local innerY = -LC.SECTION_PADDING_TOP
-
-    local debugToggle = W.CreateToggle(content, {
-        label = L["Enable Debug Mode"],
-        tooltip = L["Enable verbose debug logging to chat"],
-        get = function() return dsns._debugMode or (db.profile.debug) end,
-        set = function(value)
-            dsns._debugMode = value
-            db.profile.debug = value
-        end,
-    })
-    innerY = LC.AnchorWidget(debugToggle, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
-
-    local printStatusButton = W.CreateButton(content, {
-        text = L["Print Status"],
-        tooltip = L["Print current addon state to chat"],
-        onClick = function()
-            dsns.HandleSlashCommand("status")
-        end,
-    })
-    innerY = LC.AnchorWidget(printStatusButton, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
-
-    local clearThrottleButton = W.CreateButton(content, {
-        text = L["Clear Throttle"],
-        tooltip = L["Reset all announce throttle timers"],
-        onClick = function()
-            dsns.Announcer.ClearThrottle()
-            dsns.Print(L["Reset all announce throttle timers"])
-        end,
-    })
-    innerY = LC.AnchorWidget(clearThrottleButton, content, innerY) - LC.SPACING_BETWEEN_WIDGETS
-
-    section:SetContentHeight(math_abs(innerY) + LC.SECTION_PADDING_BOTTOM)
-    yOffset = LC.AnchorSection(section, parent, yOffset) - LC.SPACING_BETWEEN_SECTIONS
-
-    return yOffset
-end
-
 -------------------------------------------------------------------------------
 -- Build the General tab content
 -------------------------------------------------------------------------------
@@ -169,7 +126,6 @@ local function CreateContent(parent)
 
     yOffset = CreateCoreSection(parent, yOffset)
     yOffset = CreateTestingSection(parent, yOffset)
-    yOffset = CreateDebugSection(parent, yOffset)
 
     parent:SetHeight(math_abs(yOffset) + LC.PADDING_BOTTOM)
 end
