@@ -89,6 +89,9 @@ end
 
 local function ToggleDebug()
     ns._debugMode = not ns._debugMode
+    if ns.Addon and ns.Addon.db and ns.Addon.db.profile then
+        ns.Addon.db.profile.debug = ns._debugMode
+    end
     ns.Print(L["Debug mode: "] .. (ns._debugMode and (ns.COLOR_GREEN .. L["Yes"]) or (ns.COLOR_RED .. L["No"]))
         .. ns.COLOR_RESET)
 end

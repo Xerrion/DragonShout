@@ -45,7 +45,7 @@ local function OnCombatLogEvent()
     local handler = DISPATCH[subevent]
     if not handler then return end
 
-    ns.DebugPrint(string_format("CombatLogListener: dispatching %s", subevent))
+    ns.DebugPrintCLEU(sourceGUID, destGUID, string_format("CombatLogListener: dispatching %s", subevent))
 
     handler(sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
             destGUID, destName, destFlags, destRaidFlags)

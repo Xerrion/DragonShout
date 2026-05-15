@@ -36,3 +36,4 @@ Tabs\CCAppliedTab.lua
 Tabs\DispelsTab.lua
 Tabs\CustomSpellsTab.lua
 Tabs\ProfilesTab.lua
+Tabs\DebugTab.lua
