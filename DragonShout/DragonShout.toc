@@ -30,6 +30,7 @@ Locales\zhTW.lua
 
 # Core
 Core\Init.lua
+Core\Capabilities.lua
 Core\Config.lua
 Core\Lifecycle.lua
 Core\ConfigWindow.lua
@@ -37,8 +38,15 @@ Core\Announcer.lua
 Core\SlashCommands.lua
 Core\MinimapIcon.lua
 
+# Data
+Data\CC_Retail.lua
+Data\CC_MoP.lua
+Data\CC_TBC.lua
+Data\CC_Era.lua
+
 # Listeners
 Listeners\CombatLogListener.lua
+Listeners\UnitEventListener.lua
 Listeners\InterruptListener.lua
 Listeners\AuraListener.lua
 Listeners\DispelListener.lua

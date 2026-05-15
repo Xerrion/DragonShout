@@ -144,7 +144,8 @@ L["Announcement template. Tokens: {spell}, {target}, {extraSpell}"] = "通告模
 -- DragonShout_Options/Tabs/CustomSpellsTab.lua
 L["Custom Spells"] = "自定义技能"
 L["Add spell IDs to announce when applied to or by you."] = "添加技能ID，当该技能作用于你或由你释放时发送通告。"
-L["Template tokens: {spell} (spell name), {target} (target unit), {source} (caster)"] = "模板参数：技能：{spell}，目标：{target}，施法者：{source}"
+L["Template tokens: {spell} (spell name), {target} (target unit), {source} (caster)"]
+    = "模板参数：技能：{spell}，目标：{target}，施法者：{source}"
 L["Spell ID"] = "技能ID"
 L["Add"] = "添加"
 L["No custom spells configured."] = "未配置任何自定义技能。"
@@ -174,8 +175,16 @@ L["Enter a name for a new profile"] = "输入新配置文件的名称"
 L["New Profile Name"] = "新配置文件名称"
 L["Profile Actions"] = "配置文件操作"
 L["Profiles"] = "配置文件"
-L["Profiles allow you to save different configurations for different characters."] = "配置文件功能允许你为不同角色保存不同的插件配置。"
+L["Profiles allow you to save different configurations for different characters."]
+    = "配置文件功能允许你为不同角色保存不同的插件配置。"
 L["Reset"] = "重置"
 L["Reset Profile"] = "重置配置文件"
 L["Reset the current profile to default settings"] = "将当前配置文件重置为默认设置"
 L["Select the active profile"] = "选择当前生效的配置文件"
+
+-- DragonShout_Options/Tabs/DebugTab.lua
+L["Debug Log"] = ""
+L["Refresh"] = ""
+L["Clear Log"] = ""
+L["Copy"] = ""
+L["Click in the box and press Ctrl+C to copy"] = ""

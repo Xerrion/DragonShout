@@ -178,3 +178,10 @@ L["Reset"] = true
 L["Reset Profile"] = true
 L["Reset the current profile to default settings"] = true
 L["Select the active profile"] = true
+
+-- DragonShout_Options/Tabs/DebugTab.lua
+L["Debug Log"] = true
+L["Refresh"] = true
+L["Clear Log"] = true
+L["Copy"] = true
+L["Click in the box and press Ctrl+C to copy"] = true

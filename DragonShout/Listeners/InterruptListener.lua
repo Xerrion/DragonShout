@@ -38,19 +38,32 @@ end
 
 ns.InterruptListener = {}
 
-function ns.InterruptListener.OnInterrupt(sourceGUID, sourceName, _, _, _, destName, _, _)
+function ns.InterruptListener.OnInterrupt(sourceGUID, sourceName, _, _, destGUID, destName, _, _, extras)
     if not ns.playerGUID then
         ns.DebugPrint("InterruptListener: playerGUID is nil, skipping")
         return
     end
     if sourceGUID ~= ns.playerGUID then
-        ns.DebugPrint(string_format("InterruptListener: sourceGUID %s != playerGUID %s",
+        ns.DebugPrintCLEU(sourceGUID, destGUID, string_format("InterruptListener: sourceGUID %s != playerGUID %s",
             tostring(sourceGUID), tostring(ns.playerGUID)))
         return
     end
 
-    local spellId, spellName, _, extraSpellId = select(12, CombatLogGetCurrentEventInfo())
-    local extraSpellName = GetSpellName(extraSpellId)
+    -- `extras` is the post-PR-#28 minimal signature extension: when present
+    -- (UnitEventListener on retail Midnight), spell info travels through it
+    -- because CombatLogGetCurrentEventInfo() is not the source of truth.
+    -- When nil (CombatLogListener on Classic), fall back to CLEU positional
+    -- arguments at index 12+.
+    local spellId, spellName, extraSpellName
+    if extras then
+        spellId = extras.spellId
+        spellName = extras.spellName
+        extraSpellName = extras.extraSpellName
+    else
+        local extraSpellId
+        spellId, spellName, _, extraSpellId = select(12, CombatLogGetCurrentEventInfo())
+        extraSpellName = GetSpellName(extraSpellId)
+    end
 
     ns.Announcer.Announce("interrupts", spellId, {
         spell = spellName,
@@ -59,6 +72,6 @@ function ns.InterruptListener.OnInterrupt(sourceGUID, sourceName, _, _, _, destN
         extraSpell = extraSpellName,
     })
 
-    ns.DebugPrint(string_format("InterruptListener: interrupt detected spellId=%s target=%s",
+    ns.DebugPrintCLEU(sourceGUID, destGUID, string_format("InterruptListener: interrupt detected spellId=%s target=%s",
         tostring(spellId), tostring(destName)))
 end

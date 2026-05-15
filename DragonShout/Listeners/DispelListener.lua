@@ -22,13 +22,13 @@ local tostring = tostring
 
 ns.DispelListener = {}
 
-function ns.DispelListener.OnDispel(sourceGUID, sourceName, _, _, _, destName, _, _)
+function ns.DispelListener.OnDispel(sourceGUID, sourceName, _, _, destGUID, destName, _, _)
     if not ns.playerGUID then
         ns.DebugPrint("DispelListener: playerGUID is nil, skipping")
         return
     end
     if sourceGUID ~= ns.playerGUID then
-        ns.DebugPrint(string_format("DispelListener: sourceGUID %s != playerGUID %s",
+        ns.DebugPrintCLEU(sourceGUID, destGUID, string_format("DispelListener: sourceGUID %s != playerGUID %s",
             tostring(sourceGUID), tostring(ns.playerGUID)))
         return
     end
@@ -42,6 +42,6 @@ function ns.DispelListener.OnDispel(sourceGUID, sourceName, _, _, _, destName, _
         extraSpell = extraSpellName,
     })
 
-    ns.DebugPrint(string_format("DispelListener: dispel detected spellId=%s target=%s",
+    ns.DebugPrintCLEU(sourceGUID, destGUID, string_format("DispelListener: dispel detected spellId=%s target=%s",
         tostring(spellId), tostring(destName)))
 end

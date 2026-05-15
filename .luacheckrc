@@ -29,6 +29,7 @@ read_globals = {
     "CreateFrame", "GetTime", "UIParent", "GameTooltip",
     "PlaySound",
     "C_Timer",
+    "date",
 
     -- Libraries
     "LibStub",
@@ -52,16 +53,17 @@ files["DragonShout/"] = {
     read_globals = {
         -- WoW API
         "IsInGroup", "IsInRaid", "IsInInstance",
-        "UnitGUID", "UnitDebuff", "C_UnitAuras",
+        "UnitGUID", "UnitName", "UnitDebuff", "C_UnitAuras",
         "CombatLogGetCurrentEventInfo",
         "SendChatMessage", "C_ChatInfo",
         "InCombatLockdown", "IsShiftKeyDown",
         "InterfaceOptionsFrame_OpenToCategory", "Settings",
         "hooksecurefunc",
         "GetSpellInfo", "C_Spell",
+        "GetBuildInfo", "C_RestrictedActions",
 
         -- WoW Globals
-        "WOW_PROJECT_ID", "WOW_PROJECT_MAINLINE",
+        "WOW_PROJECT_ID", "WOW_PROJECT_MAINLINE", "WOW_PROJECT_CLASSIC",
         "WOW_PROJECT_BURNING_CRUSADE_CLASSIC", "WOW_PROJECT_MISTS_CLASSIC",
         "LE_PARTY_CATEGORY_INSTANCE",
 
@@ -94,6 +96,8 @@ files["DragonShout_Options/"] = {
         "UISpecialFrames",
         "GameFontNormal", "GameFontNormalSmall", "GameFontNormalLarge",
         "GameFontHighlight", "GameFontHighlightSmall",
+        "GameFontDisableSmall",
+        "ChatFontNormal",
 
         -- DragonShout bridge
         "DragonShoutNS",
