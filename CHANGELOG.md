@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.3.0](https://github.com/Xerrion/DragonShout/compare/1.2.1...1.3.0) (2026-05-15)
+
+
+### 🚀 Features
+
+* add debug log tab and split CC data by game version ([#30](https://github.com/Xerrion/DragonShout/issues/30)) ([5b24562](https://github.com/Xerrion/DragonShout/commit/5b2456218d28e5df08a84e527258d5e7908e791e))
+* PR-23 ([#31](https://github.com/Xerrion/DragonShout/issues/31)) ([b43c855](https://github.com/Xerrion/DragonShout/commit/b43c855e8d17e63b6859650b832cebe439d0e9ca))
+
+
+### 🐛 Bug Fixes
+
+* avoid AceEvent shared-frame taint for combat log registration ([#22](https://github.com/Xerrion/DragonShout/issues/22)) ([#26](https://github.com/Xerrion/DragonShout/issues/26)) ([f85fe8b](https://github.com/Xerrion/DragonShout/commit/f85fe8b5ae7dcd06714e6213aa99b2bfb6cc1205))
+
+
+### ⚙️ Miscellaneous Tasks
+
+* code-quality cleanup batch ([#17](https://github.com/Xerrion/DragonShout/issues/17)) ([#20](https://github.com/Xerrion/DragonShout/issues/20)) ([562a8c4](https://github.com/Xerrion/DragonShout/commit/562a8c451b59d68e182e5d64ad8d1d28e070b921))
+* ignore .deliverables/ orchestration scratchpad ([1502ed0](https://github.com/Xerrion/DragonShout/commit/1502ed0f50064fe53e77fdf6c849b0a483a8eb4d))
+
 ## [1.2.1](https://github.com/Xerrion/DragonShout/compare/1.2.0...1.2.1) (2026-04-22)
 
 
