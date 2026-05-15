@@ -3,6 +3,7 @@
 ## Interface-Mists: 50503
 ## Title: Dragon Shout
 ## Notes: A highly customizable combat announcer for interrupts, CC, and dispels
+## Notes-zhCN: 高度自定义的战斗通告插件，支持打断、控制效果与驱散播报。
 ## Author: Xerrion
 ## Version: @project-version@
 ## SavedVariables: DragonShoutDB
