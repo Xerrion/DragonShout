@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.1](https://github.com/Xerrion/DragonShout/compare/1.3.0...1.3.1) (2026-07-14)
+
+
+### ⚙️ Miscellaneous Tasks
+
+* update TOC Interface versions ([#32](https://github.com/Xerrion/DragonShout/issues/32)) ([cb16718](https://github.com/Xerrion/DragonShout/commit/cb16718912b3f539cd86b5b4201cb49a5ed1ccad))
+* update TOC Interface versions ([#34](https://github.com/Xerrion/DragonShout/issues/34)) ([038da32](https://github.com/Xerrion/DragonShout/commit/038da32f3e0c6e86ea4834a10509e53f89d1ac4a))
+
 ## [1.3.0](https://github.com/Xerrion/DragonShout/compare/1.2.1...1.3.0) (2026-05-15)
 
 
