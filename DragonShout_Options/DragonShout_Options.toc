@@ -1,5 +1,5 @@
 ## Interface: 120007
-## Interface-BCC: 20505
+## Interface-BCC: 20506
 ## Interface-Mists: 50504
 ## Title: DragonShout Options
 ## Notes: Configuration panel for DragonShout
