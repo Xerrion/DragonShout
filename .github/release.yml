@@ -1,0 +1,25 @@
+changelog:
+  exclude:
+    labels:
+      - "autorelease: pending"
+      - "autorelease: tagged"
+      - autorelease
+      - automated
+    authors:
+      - dependabot
+  categories:
+    - title: "Features"
+      labels:
+        - enhancement
+        - C-Feature
+    - title: "Bug Fixes"
+      labels:
+        - bug
+        - C-Bug
+    - title: "Documentation"
+      labels:
+        - documentation
+        - C-Documentation
+    - title: "Other Changes"
+      labels:
+        - "*"
