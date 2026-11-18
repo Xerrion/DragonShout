@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.3.4 (2026-11-18)
+
+<!-- Release notes generated using configuration in .github/release.yml at master -->
+
+## What's Changed
+### ⚙️ Other Changes
+* ci: run lint on pull_request instead of pull_request_target by @Xerrion in https://github.com/Xerrion/DragonShout/pull/39
+* chore: use GitHub-generated release notes to credit contributors by @Xerrion in https://github.com/Xerrion/DragonShout/pull/40
+* ci: add PR labeler and unify release note categories by @Xerrion in https://github.com/Xerrion/DragonShout/pull/42
+* ci: use pull_request triggers and update action versions by @Xerrion in https://github.com/Xerrion/DragonShout/pull/43
+* ci: run the PR labeler on pull_request_target for fork PRs by @Xerrion in https://github.com/Xerrion/DragonShout/pull/44
+
+
+**Full Changelog**: https://github.com/Xerrion/DragonShout/compare/1.3.3...1.3.4
+
 ## [1.3.3](https://github.com/Xerrion/DragonShout/compare/1.3.2...1.3.3) (2026-10-14)
 
 
