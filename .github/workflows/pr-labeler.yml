@@ -1,8 +1,10 @@
 name: PR Labeler
 
-# The called workflow skips fork PRs (read-only token) and only reads the title.
+# pull_request_target so fork PRs get a token that can label them. This is the
+# one deliberate exception to the pull_request rule: the called workflow never
+# checks out PR code and only reads the title.
 on:
-  pull_request:
+  pull_request_target:
     branches: [master]
     types: [opened, edited, reopened]
 
