@@ -8,18 +8,27 @@ changelog:
     authors:
       - dependabot
   categories:
-    - title: "Features"
+    - title: "🚀 Features"
       labels:
-        - enhancement
         - C-Feature
-    - title: "Bug Fixes"
+    - title: "🐛 Bug Fixes"
       labels:
-        - bug
         - C-Bug
-    - title: "Documentation"
+    - title: "⚡ Performance"
       labels:
-        - documentation
+        - C-Performance
+    - title: "🧭 Usability"
+      labels:
+        - C-Usability
+    - title: "🚜 Refactor"
+      labels:
+        - C-Code-Quality
+    - title: "🌍 Localization"
+      labels:
+        - C-Localization
+    - title: "📚 Documentation"
+      labels:
         - C-Documentation
-    - title: "Other Changes"
+    - title: "⚙️ Other Changes"
       labels:
         - "*"

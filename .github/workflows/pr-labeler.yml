@@ -1,0 +1,15 @@
+name: PR Labeler
+
+# pull_request_target so fork PRs get a token that can label them. The called
+# workflow never checks out PR code; it only reads the title.
+on:
+  pull_request_target:
+    branches: [master]
+    types: [opened, edited, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  label:
+    uses: Xerrion/wow-workflows/.github/workflows/pr-labeler.yml@main
